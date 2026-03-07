@@ -21,7 +21,7 @@ A production-ready web app for managing club events with participant registratio
 ### Prerequisites
 
 - Node.js 18+
-- PostgreSQL (or use [Neon](https://neon.tech), [Supabase](https://supabase.com), or run `npx prisma dev` for local Postgres)
+- PostgreSQL (Docker, [Neon](https://neon.tech), [Supabase](https://supabase.com), or local install)
 
 ### Setup
 
@@ -30,6 +30,7 @@ A production-ready web app for managing club events with participant registratio
    ```bash
    npm install
    ```
+   (Runs `prisma generate` automatically via postinstall)
 
 2. **Configure database**
 
@@ -39,19 +40,23 @@ A production-ready web app for managing club events with participant registratio
    cp .env.example .env
    ```
 
-   For local development with Prisma Postgres:
+   **Option A – Docker (recommended for local dev):**
 
    ```bash
-   npx prisma dev
+   docker compose up -d
    ```
 
-   This starts a local Postgres and prints a `DATABASE_URL`. Add it to `.env`.
+   Then set in `.env`:
+   ```
+   DATABASE_URL="postgresql://bhos:bhos_secret@localhost:5432/bhos_events?schema=public"
+   ```
 
-3. **Run migrations**
+   **Option B – Neon / Supabase:** Create a free database and paste the connection string into `.env`.
+
+3. **Apply schema**
 
    ```bash
    npm run db:push
-   # or for migrations: npm run db:migrate
    ```
 
 4. **Start the app**
@@ -64,26 +69,238 @@ A production-ready web app for managing club events with participant registratio
 
 ## Deployment
 
-### Vercel + Neon/Supabase
+This app can be deployed to any platform that supports Next.js and PostgreSQL. Below are step-by-step guides for the most common options.
 
-1. Create a PostgreSQL database on [Neon](https://neon.tech) or [Supabase](https://supabase.com).
-2. Add `DATABASE_URL` to your Vercel project environment variables.
-3. Deploy:
+### Which platform to choose?
 
+| Platform | Best for | Database | Free tier |
+|----------|----------|----------|-----------|
+| **Vercel** | Next.js native, fastest setup | Bring your own (Neon, Supabase) | Yes |
+| **Railway** | All-in-one (app + DB in one place) | Built-in Postgres | $5 credit/month |
+| **Render** | Simple, predictable pricing | Built-in Postgres or external | Yes (with limits) |
+| **Fly.io** | Global edge, low latency | Supabase/Neon or Fly Postgres | Yes |
+| **Netlify** | Alternative to Vercel | Bring your own | Yes |
+
+---
+
+### 1. Vercel (recommended for Next.js)
+
+Vercel is built by the Next.js team and offers the smoothest deployment experience.
+
+**Database options:** [Neon](https://neon.tech) (serverless Postgres) or [Supabase](https://supabase.com) (Postgres + extras).
+
+**Steps:**
+
+1. **Create a database**
+   - [Neon](https://neon.tech): Sign up → Create project → Copy connection string
+   - [Supabase](https://supabase.com): New project → Settings → Database → Connection string (URI)
+
+2. **Push your code to GitHub** (or GitLab/Bitbucket)
+
+3. **Import to Vercel**
+   - Go to [vercel.com/new](https://vercel.com/new)
+   - Import your repository
+   - Add environment variable: `DATABASE_URL` = your Postgres connection string
+   - Deploy
+
+4. **Run migrations** (one-time, from your machine):
    ```bash
-   vercel
+   DATABASE_URL="your-production-url" npx prisma db push
    ```
-
-4. Run migrations (one-time):
-
+   Or use Vercel’s env vars and run:
    ```bash
+   vercel env pull .env.production
    npx prisma db push
-   # or: npx prisma migrate deploy
    ```
 
-### Railway / Render / Fly.io
+5. **Optional:** Enable Vercel Analytics and set up a custom domain in Project Settings.
 
-Same steps: set `DATABASE_URL`, deploy, then run `prisma db push` or `prisma migrate deploy` against your production database.
+---
+
+### 2. Railway
+
+Railway provides app hosting and Postgres in one place.
+
+**Steps:**
+
+1. **Sign up** at [railway.app](https://railway.app)
+
+2. **Create a new project** → Add PostgreSQL (one click)
+
+3. **Add your app**
+   - New → GitHub Repo → Select this project
+   - Railway will detect Next.js and set build commands
+
+4. **Configure environment**
+   - In your Postgres service: Variables → Copy `DATABASE_URL`
+   - In your app service: Variables → Add `DATABASE_URL` (paste the value)
+
+5. **Deploy**
+   - Railway builds and deploys automatically
+   - Run migrations: App service → Settings → Deploy → add a one-off command:
+     ```bash
+     npx prisma db push
+     ```
+   - Or from your machine:
+     ```bash
+     railway run npx prisma db push
+     ```
+
+6. **Domain:** Railway assigns a URL; you can add a custom domain in Settings.
+
+---
+
+### 3. Render
+
+Render offers static sites, web services, and Postgres.
+
+**Steps:**
+
+1. **Sign up** at [render.com](https://render.com)
+
+2. **Create a PostgreSQL database**
+   - Dashboard → New → PostgreSQL
+   - Name it (e.g. `bhos-events-db`)
+   - Copy the **Internal Database URL** (for use on Render) or **External URL** (for local access)
+
+3. **Create a Web Service**
+   - New → Web Service
+   - Connect your GitHub repo
+   - **Build command:** `npm install && npm run build`
+   - **Start command:** `npm start`
+   - **Environment:** Add `DATABASE_URL` = your Render Postgres Internal URL
+
+4. **Deploy**
+   - Render builds and deploys on push
+   - Run migrations once via Shell (Dashboard → Your service → Shell):
+     ```bash
+     npx prisma db push
+     ```
+
+5. **Custom domain:** Settings → Custom Domains
+
+---
+
+### 4. Fly.io
+
+Fly.io runs apps close to users with edge regions.
+
+**Steps:**
+
+1. **Install Fly CLI:** [fly.io/docs/hands-on/install-flyctl](https://fly.io/docs/hands-on/install-flyctl/)
+
+2. **Create a database**
+   - Use [Neon](https://neon.tech) or [Supabase](https://supabase.com), or
+   - Fly Postgres: `fly postgres create` (paid)
+
+3. **Launch the app**
+   ```bash
+   fly launch
+   ```
+   - Choose app name, region, and Postgres if you created one on Fly
+
+4. **Set secrets**
+   ```bash
+   fly secrets set DATABASE_URL="postgresql://..."
+   ```
+
+5. **Deploy**
+   ```bash
+   fly deploy
+   ```
+
+6. **Migrations**
+   ```bash
+   fly ssh console
+   npx prisma db push
+   exit
+   ```
+
+---
+
+### 5. Netlify
+
+Netlify supports Next.js via the Essential Next.js plugin.
+
+**Steps:**
+
+1. **Create a database** on [Neon](https://neon.tech) or [Supabase](https://supabase.com)
+
+2. **Connect repo** at [app.netlify.com](https://app.netlify.com)
+   - New site → Import from Git → Select repo
+
+3. **Build settings**
+   - Build command: `npm run build`
+   - Publish directory: `.next` (or leave default; Netlify detects Next.js)
+   - Add `DATABASE_URL` in Site settings → Environment variables
+
+4. **Deploy**
+   - Netlify builds and deploys on push
+   - Run migrations from your machine:
+     ```bash
+     DATABASE_URL="your-url" npx prisma db push
+     ```
+
+---
+
+### 6. Self-hosted (Docker / VPS)
+
+For full control on a VPS (DigitalOcean, Linode, AWS EC2, etc.):
+
+**Docker Compose (single server):**
+
+1. Create `Dockerfile`:
+   ```dockerfile
+   FROM node:20-alpine AS builder
+   WORKDIR /app
+   COPY package*.json ./
+   RUN npm ci
+   COPY . .
+   RUN npx prisma generate
+   RUN npm run build
+
+   FROM node:20-alpine AS runner
+   WORKDIR /app
+   ENV NODE_ENV=production
+   COPY --from=builder /app/.next/standalone ./
+   COPY --from=builder /app/.next/static ./.next/static
+   COPY --from=builder /app/public ./public
+   EXPOSE 3000
+   CMD ["node", "server.js"]
+   ```
+
+2. Add to `next.config.ts`:
+   ```ts
+   const nextConfig = { output: "standalone" };
+   ```
+
+3. Use `docker-compose.yml` to run app + Postgres, set `DATABASE_URL` to the Postgres service URL, then:
+   ```bash
+   docker compose up -d
+   docker compose exec app npx prisma db push
+   ```
+
+---
+
+### Database providers (for Vercel, Netlify, Fly.io)
+
+| Provider | Free tier | Notes |
+|----------|-----------|-------|
+| [Neon](https://neon.tech) | 0.5 GB, 1 project | Serverless, good for Vercel |
+| [Supabase](https://supabase.com) | 500 MB | Postgres + Auth, Storage |
+| [PlanetScale](https://planetscale.com) | 5 GB | MySQL only – not compatible with this app |
+| [Railway](https://railway.app) | $5 credit/month | Postgres add-on |
+| [Render](https://render.com) | 90 days free | Postgres included |
+
+---
+
+### Post-deployment checklist
+
+- [ ] `DATABASE_URL` set in production
+- [ ] `npx prisma db push` or `prisma migrate deploy` run once
+- [ ] App loads and can create an event
+- [ ] QR check-in page works (camera may need HTTPS)
+- [ ] Custom domain configured (optional)
 
 ## Project Structure
 

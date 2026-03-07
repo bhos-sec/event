@@ -34,7 +34,8 @@ export async function GET(
         width: 300,
         margin: 2,
       });
-      return new NextResponse(pngBuffer, {
+      const uint8 = new Uint8Array(pngBuffer);
+      return new NextResponse(uint8, {
         headers: {
           "Content-Type": "image/png",
           "Content-Disposition": `inline; filename="qr-${participant.id}.png"`,
