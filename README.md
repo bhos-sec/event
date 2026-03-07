@@ -13,6 +13,15 @@ A production-ready web app for managing club events with participant registratio
 - **Duplicate event** – Clone an event (with participants) for recurring events
 - **Search & filter** – Find events by name, description, location, or status
 - **Attendance analytics** – Real-time stats, attendance rate, check-ins by hour
+- **Waitlist** – When event is full, registrations go to waitlist
+- **Event categories** – Workshop, meetup, hackathon, talk, social
+- **Registration deadline** – Close registration after a set date
+- **Participant notes** – Internal notes per participant (editable)
+- **Bulk import** – Upload CSV (name, email, phone) to add participants
+- **Bulk check-in** – Select multiple participants and check in at once
+- **Add to calendar** – Download .ics file for Google Calendar, Outlook
+- **Print participant list** – Print-friendly view
+- **Dark/light theme** – Toggle stored in browser
 
 ## Tech Stack
 

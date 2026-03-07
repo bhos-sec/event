@@ -8,6 +8,7 @@ interface Event {
   name: string;
   description: string | null;
   location: string | null;
+  category: string | null;
   startDate: string;
   endDate: string | null;
   maxParticipants: number | null;

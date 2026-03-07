@@ -56,10 +56,11 @@ export default function EventDetailPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [eventRes, participantsRes, analyticsRes] = await Promise.all([
+        const [eventRes, participantsRes, analyticsRes, waitlistRes] = await Promise.all([
           fetch(`/api/events/${id}`),
           fetch(`/api/events/${id}/participants`),
           fetch(`/api/events/${id}/analytics`),
+          fetch(`/api/events/${id}/waitlist`),
         ]);
         if (eventRes.ok) setEvent(await eventRes.json());
         if (participantsRes.ok) setParticipants(await participantsRes.json());
@@ -67,6 +68,7 @@ export default function EventDetailPage() {
           const data = await analyticsRes.json();
           setAnalytics(data);
         }
+        if (waitlistRes.ok) setWaitlist(await waitlistRes.json());
       } catch (e) {
         console.error(e);
       } finally {
@@ -79,6 +81,7 @@ export default function EventDetailPage() {
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     setRegError("");
+    setRegSuccess("");
     setRegLoading(true);
     try {
       const res = await fetch(`/api/events/${id}/participants`, {
@@ -88,21 +91,19 @@ export default function EventDetailPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Registration failed");
-      setParticipants((p) => [data, ...p]);
-      setRegForm({ name: "", email: "", phone: "" });
-      if (analytics) {
-        setAnalytics((a) =>
-          a
-            ? {
-                ...a,
-                summary: {
-                  ...a.summary,
-                  totalParticipants: a.summary.totalParticipants + 1,
-                },
-              }
-            : null
-        );
+      if (data.waitlist) {
+        setRegSuccess(`${regForm.name} added to waitlist`);
+        setWaitlist((w) => [{ id: data.entry.id, name: data.entry.name, email: data.entry.email, phone: data.entry.phone, joinedAt: data.entry.joinedAt }, ...w]);
+      } else {
+        setParticipants((p) => [data, ...p]);
+        if (analytics) {
+          setAnalytics((a) =>
+            a ? { ...a, summary: { ...a.summary, totalParticipants: a.summary.totalParticipants + 1 } } : null
+          );
+        }
       }
+      setRegForm({ name: "", email: "", phone: "" });
+      setTimeout(() => setRegSuccess(""), 3000);
     } catch (err) {
       setRegError(err instanceof Error ? err.message : "Registration failed");
     } finally {
@@ -229,12 +230,54 @@ export default function EventDetailPage() {
               📱 QR Check-in
             </Link>
             <a
+              href={`/api/events/${id}/calendar`}
+              download={`${event.name}.ics`}
+              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
+            >
+              📅 Add to Calendar
+            </a>
+            <a
+              href={`/api/events/${id}/calendar`}
+              download={`${event.name.replace(/[^a-z0-9]/gi, "_")}.ics`}
+              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
+            >
+              📅 Add to Calendar
+            </a>
+            <a
               href={`/api/events/${id}/participants/export?format=csv`}
               download
               className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
             >
               📥 Export CSV
             </a>
+            <a
+              href={`/api/events/${id}/calendar`}
+              download={`${event.name.replace(/[^a-z0-9]/gi, "_")}.ics`}
+              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
+            >
+              📅 Add to Calendar
+            </a>
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="no-print inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
+            >
+              🖨️ Print
+            </button>
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700 no-print"
+            >
+              🖨️ Print
+            </button>
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700 no-print"
+            >
+              🖨️ Print
+            </button>
             <button
               onClick={handleDuplicate}
               disabled={dupLoading}
