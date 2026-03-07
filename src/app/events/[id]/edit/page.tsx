@@ -13,9 +13,11 @@ export default function EditEventPage() {
     name: "",
     description: "",
     location: "",
+    category: "",
     startDate: "",
     endDate: "",
     maxParticipants: "",
+    registrationDeadline: "",
     status: "draft",
   });
   const [loading, setLoading] = useState(true);
@@ -30,6 +32,7 @@ export default function EditEventPage() {
           name: event.name || "",
           description: event.description || "",
           location: event.location || "",
+          category: event.category || "",
           startDate: event.startDate
             ? new Date(event.startDate).toISOString().slice(0, 16)
             : "",
@@ -37,6 +40,9 @@ export default function EditEventPage() {
             ? new Date(event.endDate).toISOString().slice(0, 16)
             : "",
           maxParticipants: event.maxParticipants?.toString() || "",
+          registrationDeadline: event.registrationDeadline
+            ? new Date(event.registrationDeadline).toISOString().slice(0, 16)
+            : "",
           status: event.status || "draft",
         });
       })
@@ -55,6 +61,7 @@ export default function EditEventPage() {
         body: JSON.stringify({
           ...form,
           maxParticipants: form.maxParticipants ? parseInt(form.maxParticipants, 10) : null,
+          registrationDeadline: form.registrationDeadline || null,
         }),
       });
       if (!res.ok) {
@@ -126,6 +133,24 @@ export default function EditEventPage() {
               className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 font-mono text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
             />
           </div>
+          <div>
+            <label className="mb-1 block text-sm font-mono text-slate-400">
+              Category
+            </label>
+            <select
+              value={form.category}
+              onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 font-mono text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+            >
+              <option value="">Select category</option>
+              <option value="workshop">Workshop</option>
+              <option value="meetup">Meetup</option>
+              <option value="hackathon">Hackathon</option>
+              <option value="talk">Talk</option>
+              <option value="social">Social</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-mono text-slate-400">
@@ -162,6 +187,18 @@ export default function EditEventPage() {
               onChange={(e) => setForm((f) => ({ ...f, maxParticipants: e.target.value }))}
               className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 font-mono text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
             />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-mono text-slate-400">
+              Registration Deadline
+            </label>
+            <input
+              type="datetime-local"
+              value={form.registrationDeadline}
+              onChange={(e) => setForm((f) => ({ ...f, registrationDeadline: e.target.value }))}
+              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 font-mono text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+            />
+            <p className="mt-1 text-xs text-slate-500">Leave empty for no deadline</p>
           </div>
           <div>
             <label className="mb-1 block text-sm font-mono text-slate-400">

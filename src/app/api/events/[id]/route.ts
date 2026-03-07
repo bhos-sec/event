@@ -13,6 +13,7 @@ export async function GET(
         _count: { select: { participants: true, checkIns: true } },
       },
     });
+    // Include waitlist count via separate query if needed
 
     if (!event) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
@@ -35,7 +36,7 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, description, location, startDate, endDate, maxParticipants, status } = body;
+    const { name, description, location, category, startDate, endDate, maxParticipants, registrationDeadline, status } = body;
 
     const event = await prisma.event.update({
       where: { id },
@@ -43,10 +44,14 @@ export async function PATCH(
         ...(name !== undefined && { name }),
         ...(description !== undefined && { description }),
         ...(location !== undefined && { location }),
+        ...(category !== undefined && { category: category?.trim() || null }),
         ...(startDate !== undefined && { startDate: new Date(startDate) }),
         ...(endDate !== undefined && { endDate: endDate ? new Date(endDate) : null }),
         ...(maxParticipants !== undefined && {
           maxParticipants: maxParticipants ? parseInt(maxParticipants, 10) : null,
+        }),
+        ...(registrationDeadline !== undefined && {
+          registrationDeadline: registrationDeadline ? new Date(registrationDeadline) : null,
         }),
         ...(status !== undefined && ["draft", "published", "cancelled"].includes(status) && { status }),
       },

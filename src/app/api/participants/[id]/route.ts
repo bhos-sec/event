@@ -9,7 +9,7 @@ export async function GET(
     const { id } = await params;
     const participant = await prisma.participant.findUnique({
       where: { id },
-      include: { event: { select: { id: true, name: true } } },
+      include: { event: true },
     });
 
     if (!participant) {
@@ -21,6 +21,30 @@ export async function GET(
     console.error("Failed to fetch participant:", error);
     return NextResponse.json(
       { error: "Failed to fetch participant" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const body = await request.json();
+    const { notes } = body;
+
+    const participant = await prisma.participant.update({
+      where: { id },
+      data: { ...(notes !== undefined && { notes: notes?.trim() || null }) },
+    });
+
+    return NextResponse.json(participant);
+  } catch (error) {
+    console.error("Failed to update participant:", error);
+    return NextResponse.json(
+      { error: "Failed to update participant" },
       { status: 500 }
     );
   }

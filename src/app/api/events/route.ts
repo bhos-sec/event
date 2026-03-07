@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, description, location, startDate, endDate, maxParticipants, status } = body;
+    const { name, description, location, category, startDate, endDate, maxParticipants, registrationDeadline, status } = body;
 
     if (!name || !startDate) {
       return NextResponse.json(
@@ -52,9 +52,11 @@ export async function POST(request: NextRequest) {
         name,
         description: description || null,
         location: location || null,
+        category: category?.trim() || null,
         startDate: new Date(startDate),
         endDate: endDate ? new Date(endDate) : null,
         maxParticipants: maxParticipants ? parseInt(maxParticipants, 10) : null,
+        registrationDeadline: registrationDeadline ? new Date(registrationDeadline) : null,
         status: status === "published" || status === "cancelled" ? status : "draft",
       },
     });

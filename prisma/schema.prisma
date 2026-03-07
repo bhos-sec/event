@@ -11,22 +11,40 @@ datasource db {
 }
 
 model Event {
-  id            String   @id @default(cuid())
-  name          String
-  description   String?
-  location      String?
-  startDate     DateTime
-  endDate       DateTime?
-  maxParticipants Int?
-  status        String   @default("draft") // draft | published | cancelled
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                   String    @id @default(cuid())
+  name                 String
+  description          String?
+  location             String?
+  category             String?   // workshop, meetup, hackathon, etc.
+  startDate            DateTime
+  endDate              DateTime?
+  maxParticipants      Int?
+  registrationDeadline DateTime? // no registration after this date
+  status               String    @default("draft") // draft | published | cancelled
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   participants  Participant[]
   checkIns      CheckIn[]
+  waitlist      WaitlistEntry[]
 
   @@index([startDate])
   @@index([status])
+  @@index([category])
+}
+
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  eventId   String
+  email     String
+  name      String
+  phone     String?
+  joinedAt  DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, email])
+  @@index([eventId])
 }
 
 model Participant {
@@ -35,6 +53,7 @@ model Participant {
   email       String
   name        String
   phone       String?
+  notes       String?  // internal organizer notes
   qrToken     String   @unique // Unique token for QR check-in
   registeredAt DateTime @default(now())
 

@@ -59,3 +59,22 @@ body {
 .glow-accent-strong {
   box-shadow: 0 0 30px rgba(0, 212, 170, 0.25);
 }
+
+/* Light theme */
+html.light-theme {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --accent: #0891b2;
+  --accent-dim: #0e7490;
+  --surface: #ffffff;
+  --surface-hover: #f1f5f9;
+  --border: #e2e8f0;
+  --muted: #64748b;
+}
+
+/* Print styles */
+@media print {
+  nav, .no-print, button:not(.print-show) { display: none !important; }
+  body { background: white; color: black; }
+  a { color: inherit; }
+}

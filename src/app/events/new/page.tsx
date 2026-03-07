@@ -12,9 +12,11 @@ export default function NewEventPage() {
     name: "",
     description: "",
     location: "",
+    category: "",
     startDate: "",
     endDate: "",
     maxParticipants: "",
+    registrationDeadline: "",
     status: "draft",
   });
 
@@ -31,9 +33,11 @@ export default function NewEventPage() {
           name: form.name,
           description: form.description || null,
           location: form.location || null,
+          category: form.category || null,
           startDate: form.startDate || null,
           endDate: form.endDate || null,
           maxParticipants: form.maxParticipants ? parseInt(form.maxParticipants, 10) : null,
+          registrationDeadline: form.registrationDeadline || null,
           status: form.status,
         }),
       });
@@ -111,6 +115,25 @@ export default function NewEventPage() {
               />
             </div>
 
+            <div>
+              <label className="mb-1 block text-sm font-medium text-slate-300">
+                Category
+              </label>
+              <select
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+                className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+              >
+                <option value="">Select category</option>
+                <option value="workshop">Workshop</option>
+                <option value="meetup">Meetup</option>
+                <option value="hackathon">Hackathon</option>
+                <option value="talk">Talk</option>
+                <option value="social">Social</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1 block text-sm font-medium text-slate-300">
@@ -149,6 +172,19 @@ export default function NewEventPage() {
                 className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
                 placeholder="Unlimited"
               />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-sm font-medium text-slate-300">
+                Registration Deadline
+              </label>
+              <input
+                type="datetime-local"
+                value={form.registrationDeadline}
+                onChange={(e) => setForm({ ...form, registrationDeadline: e.target.value })}
+                className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+              />
+              <p className="mt-1 text-xs text-slate-500">Leave empty for no deadline</p>
             </div>
 
             <div>

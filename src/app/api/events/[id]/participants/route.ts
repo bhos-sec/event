@@ -45,14 +45,32 @@ export async function POST(
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    if (event.maxParticipants) {
-      const count = await prisma.participant.count({ where: { eventId } });
-      if (count >= event.maxParticipants) {
-        return NextResponse.json(
-          { error: "Event has reached maximum participants" },
-          { status: 400 }
-        );
-      }
+    // Check registration deadline
+    if (event.registrationDeadline && new Date() > event.registrationDeadline) {
+      return NextResponse.json(
+        { error: "Registration has closed" },
+        { status: 400 }
+      );
+    }
+
+    const count = await prisma.participant.count({ where: { eventId } });
+    const isFull = event.maxParticipants ? count >= event.maxParticipants : false;
+
+    if (isFull) {
+      // Add to waitlist instead
+      const waitlist = await prisma.waitlistEntry.upsert({
+        where: {
+          eventId_email: { eventId, email: email.toLowerCase().trim() },
+        },
+        create: {
+          eventId,
+          email: email.toLowerCase().trim(),
+          name: name.trim(),
+          phone: phone?.trim() || null,
+        },
+        update: { name: name.trim(), phone: phone?.trim() || null },
+      });
+      return NextResponse.json({ waitlist: true, entry: waitlist });
     }
 
     const participant = await prisma.participant.create({
