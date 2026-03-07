@@ -15,6 +15,7 @@ export default function NewEventPage() {
     startDate: "",
     endDate: "",
     maxParticipants: "",
+    status: "draft",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,6 +34,7 @@ export default function NewEventPage() {
           startDate: form.startDate || null,
           endDate: form.endDate || null,
           maxParticipants: form.maxParticipants ? parseInt(form.maxParticipants, 10) : null,
+          status: form.status,
         }),
       });
 
@@ -147,6 +149,20 @@ export default function NewEventPage() {
                 className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
                 placeholder="Unlimited"
               />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-sm font-medium text-slate-300">
+                Status
+              </label>
+              <select
+                value={form.status}
+                onChange={(e) => setForm({ ...form, status: e.target.value })}
+                className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+              >
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+              </select>
             </div>
           </div>
 

@@ -5,8 +5,13 @@ A production-ready web app for managing club events with participant registratio
 ## Features
 
 - **Create & manage events** – Name, description, location, dates, capacity
+- **Event status** – Draft, published, or cancelled; filter and search events
 - **Participant registration** – Register with name, email, phone
 - **QR check-in** – Each participant gets a unique QR code; staff can scan or participants can open the link
+- **Manual check-in** – Staff can check in participants directly from the event page
+- **Export to CSV** – Download participant list with attendance status
+- **Duplicate event** – Clone an event (with participants) for recurring events
+- **Search & filter** – Find events by name, description, location, or status
 - **Attendance analytics** – Real-time stats, attendance rate, check-ins by hour
 
 ## Tech Stack
@@ -335,5 +340,6 @@ src/
 ## License
 
 MIT
-#   U p d a t e   c o n t r i b u t o r   e m a i l  
+#   U p d a t e   c o n t r i b u t o r   e m a i l 
+ 
  

@@ -13,6 +13,7 @@ type Event = {
   startDate: string;
   endDate: string | null;
   maxParticipants: number | null;
+  status: string;
   _count: { participants: number; checkIns: number };
 };
 
@@ -39,6 +40,8 @@ export default function EventDetailPage() {
   const [regForm, setRegForm] = useState({ name: "", email: "", phone: "" });
   const [regLoading, setRegLoading] = useState(false);
   const [regError, setRegError] = useState("");
+  const [dupLoading, setDupLoading] = useState(false);
+  const [checkInLoading, setCheckInLoading] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -97,6 +100,62 @@ export default function EventDetailPage() {
     }
   }
 
+  async function handleDuplicate() {
+    setDupLoading(true);
+    try {
+      const res = await fetch(`/api/events/${id}/duplicate`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to duplicate");
+      window.location.href = `/events/${data.id}`;
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDupLoading(false);
+    }
+  }
+
+  async function handleManualCheckIn(participantId: string) {
+    setCheckInLoading(participantId);
+    try {
+      const res = await fetch(`/api/events/${id}/check-in`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ participantId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Check-in failed");
+      setParticipants((prev) =>
+        prev.map((p) =>
+          p.id === participantId ? { ...p, _count: { checkIns: 1 } } : p
+        )
+      );
+      setEvent((e) =>
+        e ? { ...e, _count: { ...e._count, checkIns: e._count.checkIns + 1 } } : null
+      );
+      if (analytics) {
+        setAnalytics((a) =>
+          a
+            ? {
+                ...a,
+                summary: {
+                  ...a.summary,
+                  totalCheckIns: a.summary.totalCheckIns + 1,
+                  noShow: Math.max(0, a.summary.noShow - 1),
+                  attendanceRate: Math.round(
+                    ((a.summary.totalCheckIns + 1) / a.summary.totalParticipants) * 100
+                  ),
+                },
+              }
+            : null
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setCheckInLoading(null);
+    }
+  }
+
   if (loading || !event) {
     return (
       <div className="min-h-screen bg-slate-950">
@@ -142,12 +201,37 @@ export default function EventDetailPage() {
             )}
           </div>
           <div className="flex flex-wrap gap-3">
+            <span
+              className={`inline-flex rounded px-2 py-1 text-xs font-mono uppercase ${
+                event.status === "published"
+                  ? "bg-emerald-500/20 text-emerald-400"
+                  : event.status === "cancelled"
+                    ? "bg-red-500/20 text-red-400"
+                    : "bg-slate-600/50 text-slate-400"
+              }`}
+            >
+              {event.status}
+            </span>
             <Link
               href={`/check-in/${id}`}
               className="inline-flex items-center gap-2 rounded-lg bg-cyan-500/20 px-4 py-2 font-mono text-sm font-medium text-cyan-400 ring-1 ring-cyan-500/50 hover:bg-cyan-500/30"
             >
               📱 QR Check-in
             </Link>
+            <a
+              href={`/api/events/${id}/participants/export?format=csv`}
+              download
+              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
+            >
+              📥 Export CSV
+            </a>
+            <button
+              onClick={handleDuplicate}
+              disabled={dupLoading}
+              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700 disabled:opacity-50"
+            >
+              {dupLoading ? "..." : "📋 Duplicate"}
+            </button>
             <Link
               href={`/events/${id}/edit`}
               className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
@@ -250,6 +334,7 @@ export default function EventDetailPage() {
                       <th className="pb-3 font-mono">Email</th>
                       <th className="pb-3 font-mono">Status</th>
                       <th className="pb-3 font-mono">QR</th>
+                      <th className="pb-3 font-mono">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -279,6 +364,19 @@ export default function EventDetailPage() {
                           >
                             View QR
                           </Link>
+                        </td>
+                        <td className="py-3">
+                          {p._count.checkIns > 0 ? (
+                            <span className="text-slate-500 text-xs">—</span>
+                          ) : (
+                            <button
+                              onClick={() => handleManualCheckIn(p.id)}
+                              disabled={checkInLoading === p.id}
+                              className="rounded bg-emerald-600/80 px-2 py-1 text-xs font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
+                            >
+                              {checkInLoading === p.id ? "..." : "Check In"}
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}

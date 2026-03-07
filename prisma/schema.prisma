@@ -18,6 +18,7 @@ model Event {
   startDate     DateTime
   endDate       DateTime?
   maxParticipants Int?
+  status        String   @default("draft") // draft | published | cancelled
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -25,6 +26,7 @@ model Event {
   checkIns      CheckIn[]
 
   @@index([startDate])
+  @@index([status])
 }
 
 model Participant {

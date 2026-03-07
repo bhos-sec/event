@@ -35,7 +35,7 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, description, location, startDate, endDate, maxParticipants } = body;
+    const { name, description, location, startDate, endDate, maxParticipants, status } = body;
 
     const event = await prisma.event.update({
       where: { id },
@@ -48,6 +48,7 @@ export async function PATCH(
         ...(maxParticipants !== undefined && {
           maxParticipants: maxParticipants ? parseInt(maxParticipants, 10) : null,
         }),
+        ...(status !== undefined && ["draft", "published", "cancelled"].includes(status) && { status }),
       },
     });
 

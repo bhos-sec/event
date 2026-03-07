@@ -16,6 +16,7 @@ export default function EditEventPage() {
     startDate: "",
     endDate: "",
     maxParticipants: "",
+    status: "draft",
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -36,6 +37,7 @@ export default function EditEventPage() {
             ? new Date(event.endDate).toISOString().slice(0, 16)
             : "",
           maxParticipants: event.maxParticipants?.toString() || "",
+          status: event.status || "draft",
         });
       })
       .catch(console.error)
@@ -160,6 +162,20 @@ export default function EditEventPage() {
               onChange={(e) => setForm((f) => ({ ...f, maxParticipants: e.target.value }))}
               className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 font-mono text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
             />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-mono text-slate-400">
+              Status
+            </label>
+            <select
+              value={form.status}
+              onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
+              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 font-mono text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+            >
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
           </div>
           {error && <p className="text-sm text-red-400">{error}</p>}
           <button
