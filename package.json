@@ -4,13 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",
+    "html5-qrcode": "^2.3.8",
     "next": "16.1.6",
+    "pg": "^8.20.0",
     "prisma": "^7.4.2",
     "qrcode": "^1.5.4",
     "react": "19.2.3",
@@ -24,6 +31,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/uuid": "^10.0.0",
+    "dotenv": "^17.3.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",

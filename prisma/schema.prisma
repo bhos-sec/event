@@ -1,8 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// BHOS Event Manager - Database Schema
+// https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client"
@@ -11,4 +8,53 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+model Event {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  location      String?
+  startDate     DateTime
+  endDate       DateTime?
+  maxParticipants Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  participants  Participant[]
+  checkIns      CheckIn[]
+
+  @@index([startDate])
+}
+
+model Participant {
+  id          String   @id @default(cuid())
+  eventId     String
+  email       String
+  name        String
+  phone       String?
+  qrToken     String   @unique // Unique token for QR check-in
+  registeredAt DateTime @default(now())
+
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  checkIns    CheckIn[]
+
+  @@unique([eventId, email])
+  @@index([eventId])
+  @@index([qrToken])
+}
+
+model CheckIn {
+  id            String   @id @default(cuid())
+  participantId String
+  eventId       String
+  checkedInAt   DateTime @default(now())
+  source        String?  // "qr" | "manual"
+
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  event         Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([participantId, eventId]) // One check-in per participant per event
+  @@index([eventId])
+  @@index([checkedInAt])
 }
