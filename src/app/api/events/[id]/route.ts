@@ -10,7 +10,7 @@ export async function GET(
     const event = await prisma.event.findUnique({
       where: { id },
       include: {
-        _count: { select: { participants: true, checkIns: true } },
+        _count: { select: { participants: true, checkIns: true, waitlist: true } },
       },
     });
     // Include waitlist count via separate query if needed

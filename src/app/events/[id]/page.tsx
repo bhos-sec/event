@@ -10,11 +10,13 @@ type Event = {
   name: string;
   description: string | null;
   location: string | null;
+  category: string | null;
   startDate: string;
   endDate: string | null;
   maxParticipants: number | null;
+  registrationDeadline: string | null;
   status: string;
-  _count: { participants: number; checkIns: number };
+  _count: { participants: number; checkIns: number; waitlist?: number };
 };
 
 type Participant = {
@@ -22,9 +24,12 @@ type Participant = {
   name: string;
   email: string;
   phone: string | null;
+  notes: string | null;
   registeredAt: string;
   _count: { checkIns: number };
 };
+
+type WaitlistEntry = { id: string; name: string; email: string; phone: string | null; joinedAt: string };
 
 export default function EventDetailPage() {
   const params = useParams();
@@ -42,6 +47,11 @@ export default function EventDetailPage() {
   const [regError, setRegError] = useState("");
   const [dupLoading, setDupLoading] = useState(false);
   const [checkInLoading, setCheckInLoading] = useState<string | null>(null);
+  const [waitlist, setWaitlist] = useState<WaitlistEntry[]>([]);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkCheckInLoading, setBulkCheckInLoading] = useState(false);
+  const [importLoading, setImportLoading] = useState(false);
+  const [regSuccess, setRegSuccess] = useState("");
 
   useEffect(() => {
     async function fetchData() {
