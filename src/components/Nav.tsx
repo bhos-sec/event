@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "@/components/ThemeProvider";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Nav() {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const { user, loading, signOut } = useAuth();
 
   return (
     <nav className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)]/95 backdrop-blur-sm">
@@ -36,22 +38,53 @@ export default function Nav() {
               </svg>
             )}
           </button>
-          <Link
-            href="/"
-            className={`text-sm font-medium transition-colors ${
-              pathname === "/"
-                ? "text-[var(--accent)]"
-                : "text-[var(--muted)] hover:text-[var(--foreground)]"
-            }`}
-          >
-            Events
-          </Link>
-          <Link
-            href="/events/new"
-            className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--background)] transition-all hover:bg-[var(--accent-dim)] glow-accent"
-          >
-            + New Event
-          </Link>
+          {!loading && (
+            user ? (
+              <>
+                <Link
+                  href="/events"
+                  className={`text-sm font-medium transition-colors ${
+                    pathname?.startsWith("/events")
+                      ? "text-[var(--accent)]"
+                      : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                  }`}
+                >
+                  Events
+                </Link>
+                <Link
+                  href="/events/new"
+                  className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--background)] transition-all hover:bg-[var(--accent-dim)] glow-accent"
+                >
+                  + New Event
+                </Link>
+                <span className="text-sm text-[var(--muted)] truncate max-w-[140px]" title={user.email ?? undefined}>
+                  {user.email}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-sm text-[var(--muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--foreground)] transition-colors"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--foreground)] hover:bg-[var(--surface-hover)] transition-colors"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--background)] transition-all hover:bg-[var(--accent-dim)] glow-accent"
+                >
+                  Sign up
+                </Link>
+              </>
+            )
+          )}
         </div>
       </div>
     </nav>

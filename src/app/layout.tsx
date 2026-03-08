@@ -3,6 +3,8 @@ import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthGuard } from "@/components/AuthGuard";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-sans",
@@ -30,8 +32,12 @@ export default function RootLayout({
     <html lang="en" className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <body className="antialiased min-h-screen bg-[var(--background)]">
         <ThemeProvider>
-          <Nav />
-          <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+          <AuthProvider>
+            <Nav />
+            <main className="min-h-[calc(100vh-4rem)]">
+              <AuthGuard>{children}</AuthGuard>
+            </main>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

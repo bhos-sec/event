@@ -14,12 +14,18 @@ function isPublicPath(pathname: string): boolean {
   return false;
 }
 
+const isFirebaseConfigured = !!(
+  typeof window !== "undefined" &&
+  process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.length
+);
+
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
+    if (!isFirebaseConfigured) return;
     if (loading) return;
     if (isPublicPath(pathname)) return;
     if (!user) {
@@ -27,7 +33,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }, [user, loading, pathname, router]);
 
-  if (loading && !isPublicPath(pathname) && !user) {
+  if (isFirebaseConfigured && loading && !isPublicPath(pathname) && !user) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
