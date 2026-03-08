@@ -1,6 +1,6 @@
 # BHOS Event Manager
 
-A production-ready web app for managing club events with participant registration, QR check-in, attendance analytics, and **authentication**.
+A production-ready web app for managing club events with participant registration, QR check-in, attendance analytics, and **authentication**. Built with **Firebase** (Auth, Firestore, Hosting).
 
 ## Features
 
@@ -22,25 +22,22 @@ A production-ready web app for managing club events with participant registratio
    npm install
    ```
 
-2. **Configure environment**
-
-   Copy `.env.example` to `.env` and fill in:
-   - `DATABASE_URL` – PostgreSQL connection string
-   - `NEXT_PUBLIC_FIREBASE_*` – Firebase config for auth (see below)
-
-3. **Set up Firebase (for authentication)**
+2. **Configure Firebase**
 
    - Go to [Firebase Console](https://console.firebase.google.com)
-   - Create a project → Enable **Authentication** → **Google** and **Email/Password**
-   - Add a web app → Copy the config into `.env`
+   - Create a project (or use existing)
+   - Enable **Authentication** → Sign-in method: **Google** and **Email/Password**
+   - Create **Firestore Database**
+   - Add a web app → Copy the config
 
-4. **Database**
+3. **Environment variables**
 
-   ```bash
-   npm run db:push
-   ```
+   Copy `.env.example` to `.env` and fill in:
 
-5. **Start the app**
+   - `NEXT_PUBLIC_FIREBASE_*` – Firebase web app config (Auth)
+   - `FIREBASE_SERVICE_ACCOUNT_KEY` – Full JSON from Project Settings → Service Accounts → Generate new private key (for Firestore in API routes)
+
+4. **Start the app**
 
    ```bash
    npm run dev
@@ -48,6 +45,19 @@ A production-ready web app for managing club events with participant registratio
 
    Open [http://localhost:3000](http://localhost:3000). Sign in or create an account to manage events.
 
-## Without Firebase
+## Deploy to Firebase
 
-If you don't set `NEXT_PUBLIC_FIREBASE_API_KEY`, the app runs without auth – all routes are accessible. Useful for local dev.
+1. Enable web frameworks and deploy:
+
+   ```bash
+   firebase experiments:enable webframeworks
+   firebase deploy
+   ```
+
+2. **Production env vars**: Set `FIREBASE_SERVICE_ACCOUNT_KEY` in Firebase Console → Functions → your function → Environment variables (or keep it in `.env` for local deploys).
+
+3. **Blaze plan** required for Cloud Functions (SSR/API routes).
+
+## Without Firebase Auth
+
+If you don't set `NEXT_PUBLIC_FIREBASE_API_KEY`, the app runs without auth – all routes are accessible. Useful for local dev. Firestore still requires `FIREBASE_SERVICE_ACCOUNT_KEY` for API routes.
