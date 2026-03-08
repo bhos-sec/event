@@ -15,9 +15,9 @@ export async function GET(
         eventId,
         ...(search && {
           OR: [
-            { name: { contains: search, mode: "insensitive" } },
-            { email: { contains: search, mode: "insensitive" } },
-            ...(search.includes("@") ? [] : [{ phone: { contains: search, mode: "insensitive" } }]),
+            { name: { contains: search, mode: "insensitive" as const } },
+            { email: { contains: search, mode: "insensitive" as const } },
+            { phone: { contains: search, mode: "insensitive" as const } },
           ],
         }),
       },
