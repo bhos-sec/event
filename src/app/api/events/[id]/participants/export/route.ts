@@ -23,11 +23,13 @@ export async function GET(
 
     const participants = participantsSnap.docs
       .map((doc) => {
-        const d = doc.data();
+        const d = doc.data() as Record<string, unknown>;
         return {
           id: doc.id,
-          ...d,
-          registeredAt: toDate(d.registeredAt),
+          name: d.name,
+          email: d.email,
+          phone: d.phone,
+          registeredAt: toDate(d.registeredAt as { toDate?: () => Date }),
           checkedIn: checkedInIds.has(doc.id),
         };
       })

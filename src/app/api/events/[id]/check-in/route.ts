@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDb, toDate } from "@/lib/firestore";
+import { getDb } from "@/lib/firestore";
 import { Timestamp } from "firebase-admin/firestore";
 
 export async function POST(
@@ -24,26 +24,26 @@ export async function POST(
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    let participantSnap: { empty: boolean; docs: { id: string; data: () => Record<string, unknown> }[] };
+    let participantDoc: { id: string; data: () => Record<string, unknown> } | null = null;
     if (qrToken) {
-      participantSnap = await db.collection("participants").where("eventId", "==", eventId).where("qrToken", "==", qrToken).get();
+      const snap = await db.collection("participants").where("eventId", "==", eventId).where("qrToken", "==", qrToken).get();
+      if (!snap.empty) participantDoc = snap.docs[0];
     } else {
       const p = await db.collection("participants").doc(participantId).get();
-      participantSnap = !p.exists || p.data()?.eventId !== eventId
-        ? { empty: true, docs: [] }
-        : { empty: false, docs: [p] };
+      if (p.exists && p.data()?.eventId === eventId) {
+        participantDoc = { id: p.id, data: () => (p.data() ?? {}) as Record<string, unknown> };
+      }
     }
 
-    if (participantSnap.empty || participantSnap.docs.length === 0) {
+    if (!participantDoc) {
       return NextResponse.json(
         { error: "Invalid QR code or participant not registered for this event" },
         { status: 404 }
       );
     }
 
-    const participant = participantSnap.docs[0];
-    const pid = participant.id;
-    const pData = participant.data();
+    const pid = participantDoc.id;
+    const pData = participantDoc.data() ?? {};
 
     const existingCheckIn = await db.collection("checkIns").where("participantId", "==", pid).where("eventId", "==", eventId).get();
     if (!existingCheckIn.empty) {

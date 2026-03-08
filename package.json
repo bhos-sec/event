@@ -6,38 +6,27 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "db:push": "prisma db push",
-    "db:generate": "prisma generate",
-    "postinstall": "prisma generate"
+    "lint": "next lint"
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.3.5",
-    "@types/pg": "^8.18.0",
     "firebase": "^12.9.0",
     "firebase-admin": "^13.7.0",
     "html5-qrcode": "^2.3.8",
     "next": "^15.1.0",
-    "pg": "^8.13.1",
     "qrcode": "^1.5.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "uuid": "^11.0.3"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@prisma/adapter-pg": "^6.10.0",
-    "@prisma/client": "^6.19.2",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^22.10.0",
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@types/uuid": "^10.0.0",
-    "dotenv": "^16.4.5",
     "eslint": "^9.15.0",
     "eslint-config-next": "^15.1.0",
     "postcss": "^8.4.49",
-    "prisma": "^6.10.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.0"
   }
