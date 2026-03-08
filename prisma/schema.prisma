@@ -11,6 +11,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Synced from Firebase Auth (Google + email/password)
+model User {
+  id         String   @id @default(cuid())
+  firebaseUid String  @unique
+  email      String
+  name       String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  events Event[]
+
+  @@index([firebaseUid])
+  @@index([email])
+}
+
 model Event {
   id                   String    @id @default(cuid())
   name                 String
@@ -22,9 +37,11 @@ model Event {
   maxParticipants      Int?
   registrationDeadline DateTime? // no registration after this date
   status               String    @default("draft") // draft | published | cancelled
+  createdById          String?   // who created the event
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
 
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
   participants  Participant[]
   checkIns      CheckIn[]
   waitlist      WaitlistEntry[]
@@ -33,6 +50,7 @@ model Event {
   @@index([startDate])
   @@index([status])
   @@index([category])
+  @@index([createdById])
 }
 
 model WaitlistEntry {
