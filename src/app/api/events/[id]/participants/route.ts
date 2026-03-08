@@ -1,31 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma, generateQrToken } from "@/lib/db";
+import { getDb, generateQrToken, toDate } from "@/lib/firestore";
+import { Timestamp } from "firebase-admin/firestore";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id: eventId } = await params;
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search")?.trim().toLowerCase();
 
-    const participants = await prisma.participant.findMany({
-      where: {
-        eventId,
-        ...(search && {
-          OR: [
-            { name: { contains: search, mode: "insensitive" as const } },
-            { email: { contains: search, mode: "insensitive" as const } },
-            { phone: { contains: search, mode: "insensitive" as const } },
-          ],
-        }),
-      },
-      include: {
-        _count: { select: { checkIns: true } },
-      },
-      orderBy: { registeredAt: "desc" },
-    });
+    const snapshot = await db.collection("participants").where("eventId", "==", eventId).get();
+
+    let participants = snapshot.docs
+      .map((doc) => {
+        const d = doc.data();
+        return {
+          id: doc.id,
+          ...d,
+          registeredAt: toDate(d.registeredAt),
+          _count: { checkIns: 0 },
+        };
+      })
+      .sort((a, b) => (b.registeredAt || "").localeCompare(a.registeredAt || ""));
+
+    if (search) {
+      participants = participants.filter(
+        (p) =>
+          p.name?.toLowerCase().includes(search) ||
+          p.email?.toLowerCase().includes(search) ||
+          p.phone?.toLowerCase().includes(search)
+      );
+    }
+
+    for (const p of participants) {
+      const checkInsSnap = await db.collection("checkIns").where("participantId", "==", p.id).where("eventId", "==", eventId).get();
+      p._count = { checkIns: checkInsSnap.size };
+    }
+
     return NextResponse.json(participants);
   } catch (error) {
     console.error("Failed to fetch participants:", error);
@@ -41,6 +55,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id: eventId } = await params;
     const body = await request.json();
     const { email, name, phone } = body;
@@ -52,50 +67,68 @@ export async function POST(
       );
     }
 
-    const event = await prisma.event.findUnique({ where: { id: eventId } });
-    if (!event) {
+    const eventDoc = await db.collection("events").doc(eventId).get();
+    if (!eventDoc.exists) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
+    const event = eventDoc.data()!;
 
-    // Check registration deadline
-    if (event.registrationDeadline && new Date() > event.registrationDeadline) {
+    const deadline = event.registrationDeadline?.toDate?.();
+    if (deadline && new Date() > deadline) {
       return NextResponse.json(
         { error: "Registration has closed" },
         { status: 400 }
       );
     }
 
-    const count = await prisma.participant.count({ where: { eventId } });
-    const isFull = event.maxParticipants ? count >= event.maxParticipants : false;
+    const participantsSnap = await db.collection("participants").where("eventId", "==", eventId).get();
+    const count = participantsSnap.size;
+    const max = event.maxParticipants ?? Infinity;
+    const isFull = count >= max;
+    const emailLo = email.toLowerCase().trim();
 
     if (isFull) {
-      // Add to waitlist instead
-      const waitlist = await prisma.waitlistEntry.upsert({
-        where: {
-          eventId_email: { eventId, email: email.toLowerCase().trim() },
-        },
-        create: {
-          eventId,
-          email: email.toLowerCase().trim(),
-          name: name.trim(),
-          phone: phone?.trim() || null,
-        },
-        update: { name: name.trim(), phone: phone?.trim() || null },
-      });
-      return NextResponse.json({ waitlist: true, entry: waitlist });
-    }
-
-    const participant = await prisma.participant.create({
-      data: {
+      const waitlistRef = db.collection("waitlist").doc();
+      await waitlistRef.set({
         eventId,
-        email: email.toLowerCase().trim(),
+        email: emailLo,
         name: name.trim(),
         phone: phone?.trim() || null,
-        qrToken: generateQrToken(),
-      },
-    });
+        joinedAt: Timestamp.now(),
+      });
+      return NextResponse.json({
+        waitlist: true,
+        entry: {
+          id: waitlistRef.id,
+          email: emailLo,
+          name: name.trim(),
+          phone: phone?.trim() || null,
+          joinedAt: new Date().toISOString(),
+        },
+      });
+    }
 
-    return NextResponse.json(participant);
+    const existing = await db.collection("participants").where("eventId", "==", eventId).where("email", "==", emailLo).get();
+    if (!existing.empty) {
+      return NextResponse.json({ error: "Already registered with this email" }, { status: 400 });
+    }
+
+    const participantRef = db.collection("participants").doc();
+    const participant = {
+      eventId,
+      email: emailLo,
+      name: name.trim(),
+      phone: phone?.trim() || null,
+      qrToken: generateQrToken(),
+      registeredAt: Timestamp.now(),
+    };
+    await participantRef.set(participant);
+
+    return NextResponse.json({
+      id: participantRef.id,
+      ...participant,
+      registeredAt: new Date().toISOString(),
+    });
   } catch (error) {
     console.error("Failed to register participant:", error);
     return NextResponse.json(

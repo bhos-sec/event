@@ -5,13 +5,11 @@ let db: Firestore | null = null;
 
 function getDb() {
   if (db) return db;
-  if (!process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
-    throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY is required for Firestore");
+  const key = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+  if (!key) {
+    throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY (JSON) is required for Firestore");
   }
-  const serviceAccount = JSON.parse(
-    process.env.FIREBASE_SERVICE_ACCOUNT_KEY
-  ) as ServiceAccount;
-
+  const serviceAccount = JSON.parse(key) as ServiceAccount;
   if (getApps().length === 0) {
     initializeApp({ credential: cert(serviceAccount) });
   }
@@ -21,6 +19,13 @@ function getDb() {
 
 export { getDb };
 
-export function generateId() {
+export function generateQrToken() {
   return getDb().collection("_").doc().id;
+}
+
+export function toDate(val: { toDate?: () => Date } | string | null): string | null {
+  if (!val) return null;
+  if (typeof val === "object" && "toDate" in val && typeof val.toDate === "function")
+    return val.toDate().toISOString();
+  return typeof val === "string" ? val : null;
 }

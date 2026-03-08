@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getDb } from "@/lib/firestore";
+import { Timestamp } from "firebase-admin/firestore";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id: eventId } = await params;
     const body = await request.json();
     const { participantIds } = body;
@@ -17,8 +19,8 @@ export async function POST(
       );
     }
 
-    const event = await prisma.event.findUnique({ where: { id: eventId } });
-    if (!event) {
+    const eventDoc = await db.collection("events").doc(eventId).get();
+    if (!eventDoc.exists) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
@@ -27,30 +29,23 @@ export async function POST(
     const notFound: string[] = [];
 
     for (const pid of participantIds) {
-      const participant = await prisma.participant.findFirst({
-        where: { id: pid, eventId },
-      });
-      if (!participant) {
+      const pDoc = await db.collection("participants").doc(pid).get();
+      if (!pDoc.exists || pDoc.data()?.eventId !== eventId) {
         notFound.push(pid);
         continue;
       }
 
-      const existing = await prisma.checkIn.findUnique({
-        where: {
-          participantId_eventId: { participantId: participant.id, eventId },
-        },
-      });
-      if (existing) {
+      const existing = await db.collection("checkIns").where("participantId", "==", pid).where("eventId", "==", eventId).get();
+      if (!existing.empty) {
         alreadyCheckedIn.push(pid);
         continue;
       }
 
-      await prisma.checkIn.create({
-        data: {
-          participantId: participant.id,
-          eventId,
-          source: "manual",
-        },
+      await db.collection("checkIns").add({
+        participantId: pid,
+        eventId,
+        checkedInAt: Timestamp.now(),
+        source: "manual",
       });
       checkedIn.push(pid);
     }

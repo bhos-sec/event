@@ -9,10 +9,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search")?.toLowerCase().trim() || "";
     const status = searchParams.get("status") || "";
 
-    let q = db.collection("events").orderBy("startDate", "desc");
-    if (status) q = q.where("status", "==", status) as FirebaseFirestore.Query;
-
-    const snapshot = await q.get();
+    const snapshot = await db.collection("events").orderBy("startDate", "desc").get();
     let events = snapshot.docs.map((doc) => {
       const d = doc.data();
       return {
@@ -27,6 +24,7 @@ export async function GET(request: NextRequest) {
       };
     });
 
+    if (status) events = events.filter((e) => e.status === status);
     if (search) {
       const s = search.toLowerCase();
       events = events.filter(

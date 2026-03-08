@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getDb, toDate } from "@/lib/firestore";
+import { Timestamp } from "firebase-admin/firestore";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id: eventId } = await params;
     const body = await request.json();
     const { qrToken, participantId } = body;
@@ -17,54 +19,52 @@ export async function POST(
       );
     }
 
-    const event = await prisma.event.findUnique({ where: { id: eventId } });
-    if (!event) {
+    const eventDoc = await db.collection("events").doc(eventId).get();
+    if (!eventDoc.exists) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    let participant;
+    let participantSnap: { empty: boolean; docs: FirebaseFirestore.DocumentSnapshot[] };
     if (qrToken) {
-      participant = await prisma.participant.findFirst({
-        where: { eventId, qrToken },
-      });
+      participantSnap = await db.collection("participants").where("eventId", "==", eventId).where("qrToken", "==", qrToken).get();
     } else {
-      participant = await prisma.participant.findFirst({
-        where: { id: participantId, eventId },
-      });
+      const p = await db.collection("participants").doc(participantId).get();
+      participantSnap = !p.exists || p.data()?.eventId !== eventId
+        ? { empty: true, docs: [] }
+        : { empty: false, docs: [p] };
     }
 
-    if (!participant) {
+    if (participantSnap.empty || participantSnap.docs.length === 0) {
       return NextResponse.json(
         { error: "Invalid QR code or participant not registered for this event" },
         { status: 404 }
       );
     }
 
-    const existing = await prisma.checkIn.findUnique({
-      where: {
-        participantId_eventId: { participantId: participant.id, eventId },
-      },
-    });
+    const participant = participantSnap.docs[0];
+    const pid = participant.id;
+    const pData = participant.data();
 
-    if (existing) {
+    const existingCheckIn = await db.collection("checkIns").where("participantId", "==", pid).where("eventId", "==", eventId).get();
+    if (!existingCheckIn.empty) {
       return NextResponse.json(
-        { error: "Already checked in", checkIn: existing },
+        { error: "Already checked in", checkIn: { id: existingCheckIn.docs[0].id } },
         { status: 400 }
       );
     }
 
-    const checkIn = await prisma.checkIn.create({
-      data: {
-        participantId: participant.id,
-        eventId,
-        source: qrToken ? "qr" : "manual",
-      },
-      include: {
-        participant: true,
-      },
+    const checkInRef = db.collection("checkIns").doc();
+    await checkInRef.set({
+      participantId: pid,
+      eventId,
+      checkedInAt: Timestamp.now(),
+      source: qrToken ? "qr" : "manual",
     });
 
-    return NextResponse.json(checkIn);
+    return NextResponse.json({
+      id: checkInRef.id,
+      participant: { name: pData.name },
+    });
   } catch (error) {
     console.error("Failed to check in:", error);
     return NextResponse.json(
