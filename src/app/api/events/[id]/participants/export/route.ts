@@ -38,10 +38,10 @@ export async function GET(
     if (format === "csv") {
       const header = "Name,Email,Phone,Registered At,Checked In\n";
       const rows = participants
-        .map(
-          (p) =>
-            `"${(p.name || "").replace(/"/g, '""')}","${(p.email || "").replace(/"/g, '""')}","${(p.phone || "").replace(/"/g, '""')}","${p.registeredAt || ""}",${p.checkedIn ? "Yes" : "No"}`
-        )
+      .map(
+        (p) =>
+          `"${String(p.name || "").replace(/"/g, '""')}","${String(p.email || "").replace(/"/g, '""')}","${String(p.phone || "").replace(/"/g, '""')}","${p.registeredAt || ""}",${p.checkedIn ? "Yes" : "No"}`
+      )
         .join("\n");
       const csv = header + rows;
       return new NextResponse(csv, {

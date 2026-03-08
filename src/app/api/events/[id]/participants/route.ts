@@ -14,13 +14,17 @@ export async function GET(
 
     const snapshot = await db.collection("participants").where("eventId", "==", eventId).get();
 
+    type ParticipantDoc = { name?: string; email?: string; phone?: string; registeredAt?: unknown };
     let participants = snapshot.docs
       .map((doc) => {
-        const d = doc.data();
+        const d = doc.data() as ParticipantDoc;
         return {
           id: doc.id,
-          ...d,
-          registeredAt: toDate(d.registeredAt),
+          name: d.name ?? null,
+          email: d.email ?? null,
+          phone: d.phone ?? null,
+          qrToken: (d as Record<string, unknown>).qrToken,
+          registeredAt: toDate(d.registeredAt as { toDate?: () => Date } | string | null),
           _count: { checkIns: 0 },
         };
       })
@@ -29,9 +33,9 @@ export async function GET(
     if (search) {
       participants = participants.filter(
         (p) =>
-          p.name?.toLowerCase().includes(search) ||
-          p.email?.toLowerCase().includes(search) ||
-          p.phone?.toLowerCase().includes(search)
+          (p.name ?? "").toLowerCase().includes(search) ||
+          (p.email ?? "").toLowerCase().includes(search) ||
+          (p.phone ?? "").toLowerCase().includes(search)
       );
     }
 
