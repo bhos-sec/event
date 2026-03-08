@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { getPasswordError } from "@/lib/password";
 
 export default function SignUpPage() {
   const { signInWithGoogle, signUpWithEmail } = useAuth();
@@ -34,8 +35,9 @@ export default function SignUpPage() {
       setError("Passwords do not match");
       return;
     }
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+    const pwdError = getPasswordError(password);
+    if (pwdError) {
+      setError(pwdError);
       return;
     }
     setLoading(true);
@@ -103,11 +105,11 @@ export default function SignUpPage() {
           />
           <input
             type="password"
-            placeholder="Password (min 6 characters)"
+            placeholder="Password (min 8 chars, letter + special char)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            minLength={6}
+            minLength={8}
             className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
           />
           <input
