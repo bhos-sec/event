@@ -26,7 +26,7 @@ export async function GET(
     feedback.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
     return NextResponse.json(feedback);
   } catch (error) {
-    console.error("Failed to fetch feedback:", error);
+    console.error("Failed to fetch feedback");
     return NextResponse.json(
       { error: "Failed to fetch feedback" },
       { status: 500 }
@@ -93,7 +93,7 @@ export async function POST(
       createdAt: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Failed to submit feedback:", error);
+    console.error("Failed to submit feedback");
     return NextResponse.json(
       { error: "Failed to submit feedback" },
       { status: 500 }

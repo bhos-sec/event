@@ -25,10 +25,12 @@ expo-env.d.ts
 # Metro
 .metro-health-check*
 
-# debug
+# debug (may contain sensitive data)
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+firebase-debug.log
+firebase-debug.*.log
 
 # macOS
 .DS_Store

@@ -33,7 +33,7 @@ export async function GET(
       checkedIn: checkInsSnap.size > 0,
     });
   } catch (error) {
-    console.error("Failed to fetch registration:", error);
+    console.error("Failed to fetch registration");
     return NextResponse.json(
       { error: "Failed to fetch registration" },
       { status: 500 }
@@ -135,7 +135,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, promoted });
   } catch (error) {
-    console.error("Failed to cancel registration:", error);
+    console.error("Failed to cancel registration");
     return NextResponse.json(
       { error: "Failed to cancel registration" },
       { status: 500 }

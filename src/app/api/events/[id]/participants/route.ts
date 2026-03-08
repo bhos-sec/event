@@ -46,7 +46,7 @@ export async function GET(
 
     return NextResponse.json(participants);
   } catch (error) {
-    console.error("Failed to fetch participants:", error);
+    console.error("Failed to fetch participants");
     return NextResponse.json(
       { error: "Failed to fetch participants" },
       { status: 500 }
@@ -134,7 +134,7 @@ export async function POST(
       registeredAt: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Failed to register participant:", error);
+    console.error("Failed to register participant");
     return NextResponse.json(
       { error: "Failed to register participant" },
       { status: 500 }

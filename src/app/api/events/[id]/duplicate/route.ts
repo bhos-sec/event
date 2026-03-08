@@ -80,7 +80,7 @@ export async function POST(
       _count: { participants: participantsCount.size, checkIns: checkInsCount.size },
     });
   } catch (error) {
-    console.error("Failed to duplicate event:", error);
+    console.error("Failed to duplicate event");
     return NextResponse.json(
       { error: "Failed to duplicate event" },
       { status: 500 }

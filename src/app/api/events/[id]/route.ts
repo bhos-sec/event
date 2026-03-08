@@ -40,7 +40,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Failed to fetch event:", error);
+    console.error("Failed to fetch event");
     return NextResponse.json(
       { error: "Failed to fetch event" },
       { status: 500 }
@@ -134,7 +134,7 @@ export async function PATCH(
       },
     });
   } catch (error) {
-    console.error("Failed to update event:", error);
+    console.error("Failed to update event");
     return NextResponse.json(
       { error: "Failed to update event" },
       { status: 500 }
@@ -164,7 +164,7 @@ export async function DELETE(
     await batch.commit();
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Failed to delete event:", error);
+    console.error("Failed to delete event");
     return NextResponse.json(
       { error: "Failed to delete event" },
       { status: 500 }

@@ -66,7 +66,7 @@ export async function POST(
       participant: { name: pData.name },
     });
   } catch (error) {
-    console.error("Failed to check in:", error);
+    console.error("Failed to check in");
     return NextResponse.json(
       { error: "Failed to check in" },
       { status: 500 }

@@ -54,7 +54,7 @@ export async function GET(
 
     return NextResponse.json({ error: "Unsupported format" }, { status: 400 });
   } catch (error) {
-    console.error("Failed to export participants:", error);
+    console.error("Failed to export participants");
     return NextResponse.json(
       { error: "Failed to export participants" },
       { status: 500 }

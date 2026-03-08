@@ -26,7 +26,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Failed to fetch participant:", error);
+    console.error("Failed to fetch participant");
     return NextResponse.json(
       { error: "Failed to fetch participant" },
       { status: 500 }
@@ -123,7 +123,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, promoted });
   } catch (error) {
-    console.error("Failed to remove participant:", error);
+    console.error("Failed to remove participant");
     return NextResponse.json(
       { error: "Failed to remove participant" },
       { status: 500 }

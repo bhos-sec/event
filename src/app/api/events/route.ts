@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(events);
   } catch (error) {
-    console.error("Failed to fetch events:", error);
+    console.error("Failed to fetch events");
     return NextResponse.json(
       { error: "Failed to fetch events" },
       { status: 500 }
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
       updatedAt: event.updatedAt.toDate().toISOString(),
     });
   } catch (error) {
-    console.error("Failed to create event:", error);
+    console.error("Failed to create event");
 
     const msg =
       error instanceof Error ? error.message : "Failed to create event";

@@ -55,7 +55,7 @@ export async function GET(
       checkInsByHour,
     });
   } catch (error) {
-    console.error("Failed to fetch analytics:", error);
+    console.error("Failed to fetch analytics");
     return NextResponse.json(
       { error: "Failed to fetch analytics" },
       { status: 500 }

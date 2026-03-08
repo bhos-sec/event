@@ -53,7 +53,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Failed to generate QR code:", error);
+    console.error("Failed to generate QR code");
     return NextResponse.json(
       { error: "Failed to generate QR code" },
       { status: 500 }

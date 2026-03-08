@@ -57,7 +57,7 @@ export async function POST(
       ids: { checkedIn, alreadyCheckedIn, notFound },
     });
   } catch (error) {
-    console.error("Failed to bulk check-in:", error);
+    console.error("Failed to bulk check-in");
     return NextResponse.json(
       { error: "Failed to bulk check-in" },
       { status: 500 }

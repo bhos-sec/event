@@ -52,7 +52,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Failed to generate calendar:", error);
+    console.error("Failed to generate calendar");
     return NextResponse.json(
       { error: "Failed to generate calendar" },
       { status: 500 }
