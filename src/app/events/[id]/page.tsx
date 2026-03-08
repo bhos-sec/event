@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import Nav from "@/components/Nav";
@@ -63,6 +63,7 @@ export default function EventDetailPage() {
   const [bulkCheckInLoading, setBulkCheckInLoading] = useState(false);
   const [importLoading, setImportLoading] = useState(false);
   const [regSuccess, setRegSuccess] = useState("");
+  const [regSuccessToken, setRegSuccessToken] = useState<string | null>(null);
 
   async function fetchParticipants(search?: string) {
     const url = search
@@ -99,10 +100,16 @@ export default function EventDetailPage() {
     fetchData();
   }, [id]);
 
+  const searchInitialized = useRef(false);
   useEffect(() => {
+    if (loading) return;
+    if (!searchInitialized.current) {
+      searchInitialized.current = true;
+      return;
+    }
     const t = setTimeout(() => fetchParticipants(searchQuery), 300);
     return () => clearTimeout(t);
-  }, [id, searchQuery]);
+  }, [id, searchQuery, loading]);
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
@@ -128,10 +135,14 @@ export default function EventDetailPage() {
           );
         }
         if (event) setEvent((e) => e ? { ...e, _count: { ...e._count, participants: e._count.participants + 1 } } : null);
-        setRegSuccess(data.qrToken ? `Registered! Manage your registration: /r/${data.qrToken}` : "Registered!");
+        setRegSuccess("Registered!");
+        setRegSuccessToken(data.qrToken || null);
       }
       setRegForm({ name: "", email: "", phone: "" });
-      setTimeout(() => setRegSuccess(""), 6000);
+      setTimeout(() => {
+        setRegSuccess("");
+        setRegSuccessToken(null);
+      }, 6000);
     } catch (err) {
       setRegError(err instanceof Error ? err.message : "Registration failed");
     } finally {
@@ -424,7 +435,15 @@ export default function EventDetailPage() {
               </div>
               {regSuccess && (
                 <p className="rounded bg-emerald-500/20 px-3 py-2 text-sm text-emerald-400">
-                  {regSuccess}
+                  {regSuccess}{" "}
+                  {regSuccessToken && (
+                    <Link
+                      href={`/r/${regSuccessToken}`}
+                      className="font-medium underline hover:no-underline"
+                    >
+                      Manage your registration
+                    </Link>
+                  )}
                 </p>
               )}
               {!isFull && (

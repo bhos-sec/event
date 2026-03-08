@@ -22,6 +22,10 @@ A production-ready web app for managing club events with participant registratio
 - **Add to calendar** – Download .ics file for Google Calendar, Outlook
 - **Print participant list** – Print-friendly view
 - **Dark/light theme** – Toggle stored in browser
+- **Participant feedback** – Ratings (1–5) and comments from checked-in participants
+- **Cancel registration** – Participants or organizers can remove a registration; waitlist auto-promotion when event was full
+- **Participant self-service** – At `/r/[token]`, participants can view/edit details, download QR, leave feedback, or cancel
+- **Search participants** – Filter by name, email, or phone within an event
 
 ## Tech Stack
 
