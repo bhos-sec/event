@@ -1,0 +1,64 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Expo (if using)
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# Environment & secrets (do not commit)
+.env
+.env*.local
+.env.production
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Firebase (keep .firebaserc if you need project id in repo)
+# .firebaserc
+*-firebase-adminsdk*.json
+*-serviceAccount*.json
+*serviceAccountKey*.json
+functions/.env
+functions/.env.*
+
+# Google/Firebase native config (often contain API keys)
+google-services.json
+GoogleService-Info.plist
+
+# typescript
+*.tsbuildinfo
+
+app-example
+
+# generated native folders
+/ios
+/android
