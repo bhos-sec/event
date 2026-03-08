@@ -1,0 +1,382 @@
+[debug] [2026-03-08T11:54:07.462Z] ----------------------------------------------------------------------
+[debug] [2026-03-08T11:54:07.465Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\eminb\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2026-03-08T11:54:07.465Z] CLI Version:   15.7.0
+[debug] [2026-03-08T11:54:07.465Z] Platform:      win32
+[debug] [2026-03-08T11:54:07.466Z] Node Version:  v22.19.0
+[debug] [2026-03-08T11:54:07.466Z] Time:          Sun Mar 08 2026 15:54:07 GMT+0400 (Azerbaijan Standard Time)
+[debug] [2026-03-08T11:54:07.466Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-08T11:54:09.053Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-08T11:54:09.054Z] > authorizing via signed-in user (emin.baxisli2005@gmail.com)
+[debug] [2026-03-08T11:54:09.054Z] [iam] checking project neuroquac for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-03-08T11:54:09.055Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:09.055Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:09.056Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions [none]
+[debug] [2026-03-08T11:54:09.056Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions  x-goog-user-project=neuroquac
+[debug] [2026-03-08T11:54:09.056Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-08T11:54:09.999Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions 200
+[debug] [2026-03-08T11:54:09.999Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-08T11:54:10.000Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:10.000Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:10.001Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/neuroquac [none]
+[debug] [2026-03-08T11:54:10.493Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/neuroquac 200
+[debug] [2026-03-08T11:54:10.494Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/neuroquac {"projectId":"neuroquac","projectNumber":"304569076541","displayName":"neuroquac","name":"projects/neuroquac","resources":{"hostingSite":"neuroquac"},"state":"ACTIVE","etag":"1_61561816-5a67-4a4f-aa5e-c482a528342f"}
+[debug] [2026-03-08T11:54:12.792Z] defaultcredentials: writing to file C:\Users\eminb\AppData\Roaming\firebase\emin_baxisli2005_gmail.com_application_default_credentials.json
+[debug] [2026-03-08T11:54:12.794Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:12.794Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:12.794Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites pageToken=&pageSize=10
+[debug] [2026-03-08T11:54:14.041Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites 200
+[debug] [2026-03-08T11:54:14.041Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites {"sites":[{"name":"projects/neuroquac/sites/neuroquac","defaultUrl":"https://neuroquac.web.app","appId":"1:304569076541:web:e845ff81d45b0832e51354","type":"DEFAULT_SITE"}]}
+[debug] [2026-03-08T11:54:14.041Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:14.041Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:14.042Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:304569076541:web:e845ff81d45b0832e51354/config [none]
+[debug] [2026-03-08T11:54:14.654Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:304569076541:web:e845ff81d45b0832e51354/config 200
+[debug] [2026-03-08T11:54:14.654Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:304569076541:web:e845ff81d45b0832e51354/config {"projectId":"neuroquac","appId":"1:304569076541:web:e845ff81d45b0832e51354","storageBucket":"neuroquac.firebasestorage.app","apiKey":"AIzaSyBOcy-uAhbwYuJyeQXCZsTk1VC4e3wZEwY","authDomain":"neuroquac.firebaseapp.com","messagingSenderId":"304569076541","measurementId":"G-4MKX78E8L6","projectNumber":"304569076541","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-03-08T11:54:19.665Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:19.666Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:19.666Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac [none]
+[debug] [2026-03-08T11:54:20.581Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac 200
+[debug] [2026-03-08T11:54:20.581Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac {"name":"projects/neuroquac/sites/neuroquac","defaultUrl":"https://neuroquac.web.app","appId":"1:304569076541:web:e845ff81d45b0832e51354","type":"DEFAULT_SITE"}
+[info]    ▲ Next.js 15.5.12
+
+[info]    - Environments: .env.local, .env
+
+
+[info]    Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully in 3.1s
+
+[info]    Linting and checking validity of types ...
+
+[info] 
+./src/app/events/[id]/page.tsx
+61:10  Warning: 'waitlist' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+64:10  Warning: 'importLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+64:25  Warning: 'setImportLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+112:6  Warning: React Hook useEffect has a missing dependency: 'fetchParticipants'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/participants/[id]/qr/page.tsx
+52:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+
+[info]    Collecting page data ...
+
+[info]    Generating static pages (0/10) ...
+
+[info]    Generating static pages (2/10) 
+
+[info]    Generating static pages (4/10) 
+
+[info]    Generating static pages (7/10) 
+
+[info]  ✓ Generating static pages (10/10)
+
+[info]    Finalizing page optimization ...
+
+[info]    Collecting build traces ...
+
+[info] 
+
+[info] Route (app)                                  Size  First Load JS
+┌ ○ /                                     1.54 kB         143 kB
+├ ○ /_not-found                             990 B         103 kB
+├ ƒ /api/events                             158 B         102 kB
+├ ƒ /api/events/[id]                        158 B         102 kB
+├ ƒ /api/events/[id]/analytics              158 B         102 kB
+├ ƒ /api/events/[id]/calendar               158 B         102 kB
+├ ƒ /api/events/[id]/check-in               158 B         102 kB
+├ ƒ /api/events/[id]/check-in/bulk          158 B         102 kB
+├ ƒ /api/events/[id]/duplicate              158 B         102 kB
+├ ƒ /api/events/[id]/feedback               158 B         102 kB
+├ ƒ /api/events/[id]/participants           158 B         102 kB
+├ ƒ /api/events/[id]/participants/export    158 B         102 kB
+├ ƒ /api/events/[id]/participants/import    158 B         102 kB
+├ ƒ /api/events/[id]/waitlist               158 B         102 kB
+├ ƒ /api/participants/[id]                  158 B         102 kB
+├ ƒ /api/participants/[id]/qr               158 B         102 kB
+├ ƒ /api/r/[token]                          158 B         102 kB
+├ ƒ /check-in/[id]                         111 kB         252 kB
+├ ○ /events                               1.42 kB         107 kB
+├ ƒ /events/[id]                          6.26 kB         147 kB
+├ ƒ /events/[id]/edit                     3.42 kB         144 kB
+├ ○ /events/new                           2.38 kB         143 kB
+├ ○ /login                                2.27 kB         143 kB
+├ ƒ /participants/[id]/qr                 2.57 kB         144 kB
+├ ƒ /r/[token]                            3.89 kB         145 kB
+└ ○ /signup                               2.22 kB         143 kB
++ First Load JS shared by all              102 kB
+  ├ chunks/255-ebd51be49873d76c.js          46 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js   54.2 kB
+  └ other shared chunks (total)              2 kB
+
+
+
+[info] ○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • non-static component /api/events/[id]/analytics/route
+[info]  • non-static component /api/events/[id]/check-in/bulk/route
+[info]  • non-static component /api/events/[id]/calendar/route
+[info]  • non-static component /api/events/[id]/duplicate/route
+[info]  • non-static component /api/events/[id]/participants/export/route
+[debug] [2026-03-08T11:54:55.773Z]  • non-static component /api/events/[id]/feedback/route
+[debug] [2026-03-08T11:54:55.773Z]  • non-static component /api/events/[id]/check-in/route
+[debug] [2026-03-08T11:54:55.773Z]  • non-static component /api/events/[id]/participants/import/route
+[debug] [2026-03-08T11:54:55.773Z]  • non-static component /api/events/[id]/route
+[debug] [2026-03-08T11:54:55.773Z]  • non-static component /api/events/[id]/waitlist/route
+[debug] [2026-03-08T11:54:55.773Z]  • non-static component /api/events/[id]/participants/route
+[debug] [2026-03-08T11:54:55.774Z]  • non-static component /api/participants/[id]/qr/route
+[debug] [2026-03-08T11:54:55.774Z]  • non-static component /api/events/route
+[debug] [2026-03-08T11:54:55.774Z]  • non-static component /api/participants/[id]/route
+[debug] [2026-03-08T11:54:55.774Z]  • non-static component /api/r/[token]/route
+[debug] [2026-03-08T11:54:55.774Z]  • non-static component /check-in/[id]/page
+[debug] [2026-03-08T11:54:55.774Z]  • non-static component /events/[id]/page
+[debug] [2026-03-08T11:54:55.774Z]  • non-static component /events/[id]/edit/page
+[debug] [2026-03-08T11:54:55.774Z]  • non-static component /participants/[id]/qr/page
+[debug] [2026-03-08T11:54:55.774Z]  • non-static component /r/[token]/page
+[info]  • and 15 other reasons, use --debug to see more
+[info] 
+[debug] [2026-03-08T11:54:55.887Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:55.887Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:54:55.887Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac [none]
+[debug] [2026-03-08T11:54:56.792Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac 200
+[debug] [2026-03-08T11:54:56.792Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac {"name":"projects/neuroquac/sites/neuroquac","defaultUrl":"https://neuroquac.web.app","appId":"1:304569076541:web:e845ff81d45b0832e51354","type":"DEFAULT_SITE"}
+[debug] [2026-03-08T11:55:43.473Z] [web frameworks] effective firebase.json:  {
+  "hosting": [
+    {
+      "source": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "frameworksBackend": {
+        "region": "us-central1"
+      },
+      "site": "neuroquac",
+      "rewrites": [
+        {
+          "source": "/**",
+          "function": {
+            "functionId": "ssrneuroquac",
+            "region": "us-central1",
+            "pinTag": true
+          }
+        }
+      ],
+      "redirects": [],
+      "headers": [
+        {
+          "source": "/_not-found",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/_not-found/layout,_N_T_/_not-found/page,_N_T_/_not-found"
+            }
+          ]
+        },
+        {
+          "source": "/favicon.ico",
+          "headers": [
+            {
+              "key": "cache-control",
+              "value": "public, max-age=0, must-revalidate"
+            },
+            {
+              "key": "content-type",
+              "value": "image/x-icon"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/favicon.ico/layout,_N_T_/favicon.ico/route,_N_T_/favicon.ico"
+            }
+          ]
+        },
+        {
+          "source": "/login",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/login/layout,_N_T_/login/page,_N_T_/login"
+            }
+          ]
+        },
+        {
+          "source": "/events/new",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/events/layout,_N_T_/events/new/layout,_N_T_/events/new/page,_N_T_/events/new"
+            }
+          ]
+        },
+        {
+          "source": "/events",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/events/layout,_N_T_/events/page,_N_T_/events"
+            }
+          ]
+        },
+        {
+          "source": "/signup",
+          "headers": [
+            {
+              "key": "x-nextjs-stale-time",
+              "value": "300"
+            },
+            {
+              "key": "x-nextjs-prerender",
+              "value": "1"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/signup/layout,_N_T_/signup/page,_N_T_/signup"
+            }
+          ]
+        },
+        {
+          "source": "/**/*.[jt]s",
+          "headers": [
+            {
+              "key": "Set-Cookie",
+              "value": "__FIREBASE_DEFAULTS__=eyJjb25maWciOnsicHJvamVjdElkIjoibmV1cm9xdWFjIiwiYXBwSWQiOiIxOjMwNDU2OTA3NjU0MTp3ZWI6ZTg0NWZmODFkNDViMDgzMmU1MTM1NCIsInN0b3JhZ2VCdWNrZXQiOiJuZXVyb3F1YWMuZmlyZWJhc2VzdG9yYWdlLmFwcCIsImFwaUtleSI6IkFJemFTeUJPY3ktdUFoYndZdUp5ZVFYQ1pzVGsxVkM0ZTN3WkV3WSIsImF1dGhEb21haW4iOiJuZXVyb3F1YWMuZmlyZWJhc2VhcHAuY29tIiwibWVzc2FnaW5nU2VuZGVySWQiOiIzMDQ1NjkwNzY1NDEiLCJtZWFzdXJlbWVudElkIjoiRy00TUtYNzhFOEw2IiwicHJvamVjdE51bWJlciI6IjMwNDU2OTA3NjU0MSIsInZlcnNpb24iOiIyIn0sIl9hdXRoVG9rZW5TeW5jVVJMIjoiL19fc2Vzc2lvbiJ9; SameSite=Strict; Expires=2028-01-31T22:35:43.473Z; Path=/;"
+            }
+          ]
+        }
+      ],
+      "cleanUrls": true,
+      "trailingSlash": false,
+      "public": ".firebase\\neuroquac\\hosting",
+      "webFramework": "next_ssr"
+    }
+  ],
+  "functions": [
+    {
+      "source": ".firebase\\neuroquac\\functions",
+      "codebase": "firebase-frameworks-neuroquac"
+    }
+  ]
+}
+[debug] [2026-03-08T11:55:43.475Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-08T11:55:43.475Z] > authorizing via signed-in user (emin.baxisli2005@gmail.com)
+[debug] [2026-03-08T11:55:43.476Z] [iam] checking project neuroquac for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2026-03-08T11:55:43.477Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:43.477Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:43.478Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions [none]
+[debug] [2026-03-08T11:55:43.478Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions  x-goog-user-project=neuroquac
+[debug] [2026-03-08T11:55:43.478Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2026-03-08T11:55:44.393Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions 200
+[debug] [2026-03-08T11:55:44.393Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2026-03-08T11:55:44.394Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:44.395Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:44.395Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/neuroquac/locations/-/functions [none]
+[debug] [2026-03-08T11:55:45.344Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/neuroquac/locations/-/functions 200
+[debug] [2026-03-08T11:55:45.344Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/neuroquac/locations/-/functions {}
+[debug] [2026-03-08T11:55:45.344Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:45.344Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:45.345Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/neuroquac/locations/-/functions filter=environment%3D%22GEN_2%22
+[debug] [2026-03-08T11:55:46.448Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/neuroquac/locations/-/functions 200
+[debug] [2026-03-08T11:55:46.448Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/neuroquac/locations/-/functions {"functions":[{"name":"projects/neuroquac/locations/us-central1/functions/transcribeAudio","buildConfig":{"build":"projects/304569076541/locations/us-central1/builds/749202a8-8929-450d-a824-9625a48a9b21","runtime":"nodejs20","entryPoint":"transcribeAudio","source":{"storageSource":{"bucket":"gcf-v2-sources-304569076541-us-central1","object":"transcribeAudio/function-source.zip","generation":"1771853539104335"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/neuroquac/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-304569076541-us-central1","object":"transcribeAudio/function-source.zip","generation":"1771853539104335"}},"dockerRegistry":"ARTIFACT_REGISTRY","serviceAccount":"projects/neuroquac/serviceAccounts/304569076541-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/neuroquac/locations/us-central1/services/transcribeaudio","timeoutSeconds":60,"environmentVariables":{"SMTP_USER":"emin.baxishli2005@gmail.com","SMTP_PASS":"pohlleecikdriknc","SMTP_FROM":"NeuroQuac <emin.baxishli2005@gmail.com>","SMTP_HOST":"","SMTP_PORT":"587","FIREBASE_CONFIG":"{\"projectId\":\"neuroquac\",\"storageBucket\":\"neuroquac.firebasestorage.app\"}","GCLOUD_PROJECT":"neuroquac","EVENTARC_CLOUD_EVENT_SOURCE":"projects/neuroquac/locations/us-central1/services/transcribeAudio","FUNCTION_TARGET":"transcribeAudio","LOG_EXECUTION_ID":"true","FUNCTION_SIGNATURE_TYPE":"http"},"maxInstanceCount":20,"ingressSettings":"ALLOW_ALL","uri":"https://transcribeaudio-td5qu2fq6a-uc.a.run.app","serviceAccountEmail":"304569076541-compute@developer.gserviceaccount.com","availableMemory":"256Mi","allTrafficOnLatestRevision":true,"revision":"transcribeaudio-00007-fus","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","updateTime":"2026-02-23T13:32:26.112030059Z","labels":{"deployment-tool":"cli-firebase","deployment-callable":"true","firebase-functions-hash":"c86a60aca0442b900cf4f18825fe82d552c70f43"},"environment":"GEN_2","url":"https://us-central1-neuroquac.cloudfunctions.net/transcribeAudio","createTime":"2026-02-23T12:16:12.857599964Z","satisfiesPzi":true},{"name":"projects/neuroquac/locations/us-central1/functions/sendEmailVerificationCode","buildConfig":{"build":"projects/304569076541/locations/us-central1/builds/749202a8-8929-450d-a824-9625a48a9b21","runtime":"nodejs20","entryPoint":"sendEmailVerificationCode","source":{"storageSource":{"bucket":"gcf-v2-sources-304569076541-us-central1","object":"sendEmailVerificationCode/function-source.zip","generation":"1771853490779906"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/neuroquac/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-304569076541-us-central1","object":"sendEmailVerificationCode/function-source.zip","generation":"1771853490779906"}},"dockerRegistry":"ARTIFACT_REGISTRY","serviceAccount":"projects/neuroquac/serviceAccounts/304569076541-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/neuroquac/locations/us-central1/services/sendemailverificationcode","timeoutSeconds":60,"environmentVariables":{"SMTP_USER":"emin.baxishli2005@gmail.com","SMTP_PASS":"pohlleecikdriknc","SMTP_FROM":"NeuroQuac <emin.baxishli2005@gmail.com>","SMTP_HOST":"","SMTP_PORT":"587","FIREBASE_CONFIG":"{\"projectId\":\"neuroquac\",\"storageBucket\":\"neuroquac.firebasestorage.app\"}","GCLOUD_PROJECT":"neuroquac","EVENTARC_CLOUD_EVENT_SOURCE":"projects/neuroquac/locations/us-central1/services/sendEmailVerificationCode","FUNCTION_TARGET":"sendEmailVerificationCode","LOG_EXECUTION_ID":"true"},"maxInstanceCount":20,"ingressSettings":"ALLOW_ALL","uri":"https://sendemailverificationcode-td5qu2fq6a-uc.a.run.app","serviceAccountEmail":"304569076541-compute@developer.gserviceaccount.com","availableMemory":"256Mi","allTrafficOnLatestRevision":true,"revision":"sendemailverificationcode-00008-xed","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","updateTime":"2026-02-23T13:32:25.763775186Z","labels":{"deployment-tool":"cli-firebase","deployment-callable":"true","firebase-functions-hash":"c86a60aca0442b900cf4f18825fe82d552c70f43"},"environment":"GEN_2","url":"https://us-central1-neuroquac.cloudfunctions.net/sendEmailVerificationCode","createTime":"2026-02-23T11:17:37.803870485Z","satisfiesPzi":true},{"name":"projects/neuroquac/locations/us-central1/functions/verifyEmailCodeAndCreateUser","buildConfig":{"build":"projects/304569076541/locations/us-central1/builds/749202a8-8929-450d-a824-9625a48a9b21","runtime":"nodejs20","entryPoint":"verifyEmailCodeAndCreateUser","source":{"storageSource":{"bucket":"gcf-v2-sources-304569076541-us-central1","object":"verifyEmailCodeAndCreateUser/function-source.zip","generation":"1771853538252053"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/neuroquac/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-304569076541-us-central1","object":"verifyEmailCodeAndCreateUser/function-source.zip","generation":"1771853538252053"}},"dockerRegistry":"ARTIFACT_REGISTRY","serviceAccount":"projects/neuroquac/serviceAccounts/304569076541-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/neuroquac/locations/us-central1/services/verifyemailcodeandcreateuser","timeoutSeconds":60,"environmentVariables":{"SMTP_USER":"emin.baxishli2005@gmail.com","SMTP_PASS":"pohlleecikdriknc","SMTP_FROM":"NeuroQuac <emin.baxishli2005@gmail.com>","SMTP_HOST":"","SMTP_PORT":"587","FIREBASE_CONFIG":"{\"projectId\":\"neuroquac\",\"storageBucket\":\"neuroquac.firebasestorage.app\"}","GCLOUD_PROJECT":"neuroquac","EVENTARC_CLOUD_EVENT_SOURCE":"projects/neuroquac/locations/us-central1/services/verifyEmailCodeAndCreateUser","FUNCTION_TARGET":"verifyEmailCodeAndCreateUser","LOG_EXECUTION_ID":"true","FUNCTION_SIGNATURE_TYPE":"http"},"maxInstanceCount":20,"ingressSettings":"ALLOW_ALL","uri":"https://verifyemailcodeandcreateuser-td5qu2fq6a-uc.a.run.app","serviceAccountEmail":"304569076541-compute@developer.gserviceaccount.com","availableMemory":"256Mi","allTrafficOnLatestRevision":true,"revision":"verifyemailcodeandcreateuser-00008-cuz","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","updateTime":"2026-02-23T13:32:26.529841852Z","labels":{"deployment-callable":"true","firebase-functions-hash":"c86a60aca0442b900cf4f18825fe82d552c70f43","deployment-tool":"cli-firebase"},"environment":"GEN_2","url":"https://us-central1-neuroquac.cloudfunctions.net/verifyEmailCodeAndCreateUser","createTime":"2026-02-23T11:18:45.248491519Z","satisfiesPzi":true}]}
+[info] i  hosting: The following function(s) are pinned to site neuroquac and will be deployed as well: ssrneuroquac 
+[info] 
+[info] === Deploying to 'neuroquac'...
+[info] 
+[info] i  deploying functions, hosting 
+[debug] [2026-03-08T11:55:46.454Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:46.454Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:46.454Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac [none]
+[debug] [2026-03-08T11:55:46.713Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac 200
+[debug] [2026-03-08T11:55:46.713Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac {"projectNumber":"304569076541","projectId":"neuroquac","lifecycleState":"ACTIVE","name":"neuroquac","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2026-02-22T11:46:58.352583Z"}
+[info] i  functions: preparing codebase firebase-frameworks-neuroquac for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2026-03-08T11:55:46.720Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:46.720Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:46.721Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/neuroquac/adminSdkConfig [none]
+[debug] [2026-03-08T11:55:47.217Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/neuroquac/adminSdkConfig 200
+[debug] [2026-03-08T11:55:47.217Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/neuroquac/adminSdkConfig {"projectId":"neuroquac","storageBucket":"neuroquac.firebasestorage.app"}
+[debug] [2026-03-08T11:55:47.218Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:47.218Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T11:55:47.218Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/neuroquac/configs [none]
+[debug] [2026-03-08T11:55:47.816Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/neuroquac/configs 200
+[debug] [2026-03-08T11:55:47.816Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/neuroquac/configs {}
+[debug] [2026-03-08T11:55:47.818Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2026-03-08T11:55:48.807Z] > [functions] package.json contents: {
+  "name": "bhos-event-manager",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "firebase": "^12.9.0",
+    "firebase-admin": "^13.7.0",
+    "html5-qrcode": "^2.3.8",
+    "next": "^15.1.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "firebase-frameworks": "^0.11.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "main": "server.js",
+  "engines": {
+    "node": "22"
+  }
+}
+[debug] [2026-03-08T11:55:48.807Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase firebase-frameworks-neuroquac to determine what to deploy 
+[debug] [2026-03-08T11:55:48.808Z] Could not find functions.yaml. Must use http discovery
+[debug] [2026-03-08T11:55:48.819Z] Found firebase-functions binary at 'C:\Users\eminb\Desktop\project1\.firebase\neuroquac\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8034
+
+[debug] [2026-03-08T11:55:49.306Z] Got response from /__/functions.yaml {"endpoints":{"ssrneuroquac":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"ssrneuroquac"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}

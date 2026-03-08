@@ -42,8 +42,8 @@ yarn-error.*
 .env.test.local
 .env.production.local
 
-# Firebase
-.firebaserc
+# Firebase (keep .firebaserc if you need project id in repo)
+# .firebaserc
 *-firebase-adminsdk*.json
 *-serviceAccount*.json
 *serviceAccountKey*.json
