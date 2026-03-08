@@ -315,13 +315,6 @@ export default function EventDetailPage() {
             </Link>
             <a
               href={`/api/events/${id}/calendar`}
-              download={`${event.name}.ics`}
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
-            >
-              📅 Add to Calendar
-            </a>
-            <a
-              href={`/api/events/${id}/calendar`}
               download={`${event.name.replace(/[^a-z0-9]/gi, "_")}.ics`}
               className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
             >
@@ -334,31 +327,10 @@ export default function EventDetailPage() {
             >
               📥 Export CSV
             </a>
-            <a
-              href={`/api/events/${id}/calendar`}
-              download={`${event.name.replace(/[^a-z0-9]/gi, "_")}.ics`}
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
-            >
-              📅 Add to Calendar
-            </a>
             <button
               type="button"
               onClick={() => window.print()}
               className="no-print inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
-            >
-              🖨️ Print
-            </button>
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700 no-print"
-            >
-              🖨️ Print
-            </button>
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700 no-print"
             >
               🖨️ Print
             </button>
@@ -504,8 +476,10 @@ export default function EventDetailPage() {
                         <input
                           type="checkbox"
                           checked={
-                            participants.filter((x) => x._count.checkIns === 0).length > 0 &&
-                            participants.every((p) => p._count.checkIns > 0 || selectedIds.has(p.id))
+                            (() => {
+                              const pending = participants.filter((p) => p._count.checkIns === 0);
+                              return pending.length > 0 && pending.every((p) => selectedIds.has(p.id));
+                            })()
                           }
                           onChange={(e) => {
                             const pending = participants.filter((p) => p._count.checkIns === 0);
