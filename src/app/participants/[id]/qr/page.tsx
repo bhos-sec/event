@@ -11,6 +11,7 @@ export default function ParticipantQRPage() {
   const [participant, setParticipant] = useState<{
     name: string;
     email: string;
+    qrToken: string;
     event: { name: string; id: string };
   } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -61,12 +62,20 @@ export default function ParticipantQRPage() {
             Show this QR code at the event entrance for check-in.
           </p>
 
-          <Link
-            href={`/events/${participant.event.id}`}
-            className="mt-6 inline-block text-sm text-cyan-400 hover:underline"
-          >
-            ← Back to event
-          </Link>
+          <div className="mt-6 flex flex-col gap-2">
+            <Link
+              href={`/r/${participant.qrToken}`}
+              className="text-sm text-cyan-400 hover:underline"
+            >
+              Manage my registration
+            </Link>
+            <Link
+              href={`/events/${participant.event.id}`}
+              className="text-sm text-slate-500 hover:text-slate-400"
+            >
+              ← Back to event
+            </Link>
+          </div>
         </div>
       </main>
     </div>

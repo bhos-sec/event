@@ -25,8 +25,17 @@ type Participant = {
   email: string;
   phone: string | null;
   notes: string | null;
+  qrToken: string;
   registeredAt: string;
   _count: { checkIns: number };
+};
+
+type Feedback = {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+  participant: { name: string };
 };
 
 type WaitlistEntry = { id: string; name: string; email: string; phone: string | null; joinedAt: string };
@@ -40,7 +49,9 @@ export default function EventDetailPage() {
     summary: { totalParticipants: number; totalCheckIns: number; attendanceRate: number; noShow: number };
     checkInsByHour: { hour: number; count: number }[];
   } | null>(null);
-  const [activeTab, setActiveTab] = useState<"participants" | "analytics">("participants");
+  const [activeTab, setActiveTab] = useState<"participants" | "analytics" | "feedback">("participants");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [feedback, setFeedback] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(true);
   const [regForm, setRegForm] = useState({ name: "", email: "", phone: "" });
   const [regLoading, setRegLoading] = useState(false);
@@ -53,14 +64,23 @@ export default function EventDetailPage() {
   const [importLoading, setImportLoading] = useState(false);
   const [regSuccess, setRegSuccess] = useState("");
 
+  async function fetchParticipants(search?: string) {
+    const url = search
+      ? `/api/events/${id}/participants?search=${encodeURIComponent(search)}`
+      : `/api/events/${id}/participants`;
+    const res = await fetch(url);
+    if (res.ok) setParticipants(await res.json());
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
-        const [eventRes, participantsRes, analyticsRes, waitlistRes] = await Promise.all([
+        const [eventRes, participantsRes, analyticsRes, waitlistRes, feedbackRes] = await Promise.all([
           fetch(`/api/events/${id}`),
           fetch(`/api/events/${id}/participants`),
           fetch(`/api/events/${id}/analytics`),
           fetch(`/api/events/${id}/waitlist`),
+          fetch(`/api/events/${id}/feedback`),
         ]);
         if (eventRes.ok) setEvent(await eventRes.json());
         if (participantsRes.ok) setParticipants(await participantsRes.json());
@@ -69,6 +89,7 @@ export default function EventDetailPage() {
           setAnalytics(data);
         }
         if (waitlistRes.ok) setWaitlist(await waitlistRes.json());
+        if (feedbackRes.ok) setFeedback(await feedbackRes.json());
       } catch (e) {
         console.error(e);
       } finally {
@@ -77,6 +98,11 @@ export default function EventDetailPage() {
     }
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    const t = setTimeout(() => fetchParticipants(searchQuery), 300);
+    return () => clearTimeout(t);
+  }, [id, searchQuery]);
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
@@ -101,9 +127,11 @@ export default function EventDetailPage() {
             a ? { ...a, summary: { ...a.summary, totalParticipants: a.summary.totalParticipants + 1 } } : null
           );
         }
+        if (event) setEvent((e) => e ? { ...e, _count: { ...e._count, participants: e._count.participants + 1 } } : null);
+        setRegSuccess(data.qrToken ? `Registered! Manage your registration: /r/${data.qrToken}` : "Registered!");
       }
       setRegForm({ name: "", email: "", phone: "" });
-      setTimeout(() => setRegSuccess(""), 3000);
+      setTimeout(() => setRegSuccess(""), 6000);
     } catch (err) {
       setRegError(err instanceof Error ? err.message : "Registration failed");
     } finally {
@@ -164,6 +192,62 @@ export default function EventDetailPage() {
       console.error(err);
     } finally {
       setCheckInLoading(null);
+    }
+  }
+
+  async function handleCancelParticipant(participantId: string) {
+    if (!confirm("Remove this participant? If event was full, first waitlist entry will be promoted.")) return;
+    try {
+      const res = await fetch(`/api/participants/${participantId}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to remove");
+      setParticipants((p) => p.filter((x) => x.id !== participantId));
+      setEvent((e) => e ? { ...e, _count: { ...e._count, participants: e._count.participants - 1 } } : null);
+      if (data.promoted) {
+        const promoted = await fetch(`/api/events/${id}/participants`).then((r) => r.json());
+        setParticipants(promoted);
+        setWaitlist((w) => w.filter((x) => x.email !== data.promoted.email));
+      }
+      if (analytics) {
+        const aRes = await fetch(`/api/events/${id}/analytics`);
+        if (aRes.ok) setAnalytics(await aRes.json());
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleBulkCheckIn() {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    setBulkCheckInLoading(true);
+    try {
+      const res = await fetch(`/api/events/${id}/check-in/bulk`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ participantIds: ids }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Bulk check-in failed");
+      setSelectedIds(new Set());
+      setParticipants((prev) =>
+        prev.map((p) =>
+          ids.includes(p.id)
+            ? { ...p, _count: { checkIns: 1 } }
+            : p
+        )
+      );
+      setEvent((e) =>
+        e ? { ...e, _count: { ...e._count, checkIns: e._count.checkIns + data.checkedIn } } : null
+      );
+      if (analytics) {
+        const aRes = await fetch(`/api/events/${id}/analytics`);
+        if (aRes.ok) setAnalytics(await aRes.json());
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setBulkCheckInLoading(false);
     }
   }
 
@@ -313,7 +397,7 @@ export default function EventDetailPage() {
         </div>
 
         <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-          <div className="mb-6 flex gap-4 border-b border-slate-800 pb-4">
+          <div className="mb-6 flex flex-wrap gap-4 border-b border-slate-800 pb-4">
             <button
               onClick={() => setActiveTab("participants")}
               className={`font-mono text-sm font-medium ${
@@ -334,10 +418,43 @@ export default function EventDetailPage() {
             >
               Analytics
             </button>
+            <button
+              onClick={() => setActiveTab("feedback")}
+              className={`font-mono text-sm font-medium ${
+                activeTab === "feedback"
+                  ? "text-cyan-400"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              Feedback
+            </button>
           </div>
 
           {activeTab === "participants" && (
             <div className="space-y-6">
+              <div className="flex flex-wrap items-center gap-3">
+                <input
+                  type="search"
+                  placeholder="Search by name, email, phone..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="max-w-xs rounded border border-slate-700 bg-slate-800 px-3 py-2 font-mono text-sm text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                />
+                {selectedIds.size > 0 && (
+                  <button
+                    onClick={handleBulkCheckIn}
+                    disabled={bulkCheckInLoading}
+                    className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
+                  >
+                    {bulkCheckInLoading ? "..." : `Check in ${selectedIds.size} selected`}
+                  </button>
+                )}
+              </div>
+              {regSuccess && (
+                <p className="rounded bg-emerald-500/20 px-3 py-2 text-sm text-emerald-400">
+                  {regSuccess}
+                </p>
+              )}
               {!isFull && (
                 <form
                   onSubmit={handleRegister}
@@ -383,6 +500,20 @@ export default function EventDetailPage() {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-700 text-left text-xs text-slate-500">
+                      <th className="pb-3 pr-2">
+                        <input
+                          type="checkbox"
+                          checked={
+                            participants.filter((x) => x._count.checkIns === 0).length > 0 &&
+                            participants.every((p) => p._count.checkIns > 0 || selectedIds.has(p.id))
+                          }
+                          onChange={(e) => {
+                            const pending = participants.filter((p) => p._count.checkIns === 0);
+                            setSelectedIds(e.target.checked ? new Set(pending.map((p) => p.id)) : new Set());
+                          }}
+                          className="rounded border-slate-600"
+                        />
+                      </th>
                       <th className="pb-3 font-mono">Name</th>
                       <th className="pb-3 font-mono">Email</th>
                       <th className="pb-3 font-mono">Status</th>
@@ -396,6 +527,23 @@ export default function EventDetailPage() {
                         key={p.id}
                         className="border-b border-slate-800/50 text-sm text-slate-300"
                       >
+                        <td className="py-3 pr-2">
+                          {p._count.checkIns === 0 && (
+                            <input
+                              type="checkbox"
+                              checked={selectedIds.has(p.id)}
+                              onChange={(e) => {
+                                setSelectedIds((s) => {
+                                  const next = new Set(s);
+                                  if (e.target.checked) next.add(p.id);
+                                  else next.delete(p.id);
+                                  return next;
+                                });
+                              }}
+                              className="rounded border-slate-600"
+                            />
+                          )}
+                        </td>
                         <td className="py-3 font-medium text-white">{p.name}</td>
                         <td className="py-3">{p.email}</td>
                         <td className="py-3">
@@ -417,19 +565,39 @@ export default function EventDetailPage() {
                           >
                             View QR
                           </Link>
+                          {p.qrToken && (
+                            <>
+                              {" · "}
+                              <Link
+                                href={`/r/${p.qrToken}`}
+                                target="_blank"
+                                className="text-slate-400 hover:text-cyan-400"
+                              >
+                                Manage
+                              </Link>
+                            </>
+                          )}
                         </td>
                         <td className="py-3">
-                          {p._count.checkIns > 0 ? (
-                            <span className="text-slate-500 text-xs">—</span>
-                          ) : (
+                          <div className="flex flex-wrap gap-1">
+                            {p._count.checkIns > 0 ? (
+                              <span className="text-slate-500 text-xs">—</span>
+                            ) : (
+                              <button
+                                onClick={() => handleManualCheckIn(p.id)}
+                                disabled={checkInLoading === p.id}
+                                className="rounded bg-emerald-600/80 px-2 py-1 text-xs font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
+                              >
+                                {checkInLoading === p.id ? "..." : "Check In"}
+                              </button>
+                            )}
                             <button
-                              onClick={() => handleManualCheckIn(p.id)}
-                              disabled={checkInLoading === p.id}
-                              className="rounded bg-emerald-600/80 px-2 py-1 text-xs font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
+                              onClick={() => handleCancelParticipant(p.id)}
+                              className="rounded bg-red-600/50 px-2 py-1 text-xs text-red-300 hover:bg-red-600/70"
                             >
-                              {checkInLoading === p.id ? "..." : "Check In"}
+                              Remove
                             </button>
-                          )}
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -496,8 +664,154 @@ export default function EventDetailPage() {
               )}
             </div>
           )}
+
+          {activeTab === "feedback" && (
+            <FeedbackTab
+              eventId={id}
+              participants={participants}
+              feedback={feedback}
+              onFeedbackChange={() =>
+                fetch(`/api/events/${id}/feedback`)
+                  .then((r) => r.json())
+                  .then(setFeedback)
+              }
+            />
+          )}
         </div>
       </main>
+    </div>
+  );
+}
+
+function FeedbackTab({
+  eventId,
+  participants,
+  feedback,
+  onFeedbackChange,
+}: {
+  eventId: string;
+  participants: Participant[];
+  feedback: Feedback[];
+  onFeedbackChange: () => void;
+}) {
+  const checkedIn = participants.filter((p) => p._count.checkIns > 0);
+  const [selectedId, setSelectedId] = useState("");
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!selectedId || rating < 1) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch(`/api/events/${eventId}/feedback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ participantId: selectedId, rating, comment }),
+      });
+      if (!res.ok) throw new Error("Failed to submit");
+      setSelectedId("");
+      setRating(0);
+      setComment("");
+      onFeedbackChange();
+    } catch {
+      console.error("Feedback submit failed");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  const avgRating =
+    feedback.length > 0
+      ? (feedback.reduce((s, f) => s + f.rating, 0) / feedback.length).toFixed(1)
+      : null;
+
+  return (
+    <div className="space-y-6">
+      {avgRating && (
+        <div className="rounded-lg bg-slate-800/50 p-4">
+          <p className="text-xs text-slate-500">Average rating</p>
+          <p className="font-mono text-2xl text-cyan-400">⭐ {avgRating} / 5</p>
+        </div>
+      )}
+      {checkedIn.length > 0 && (
+        <form onSubmit={handleSubmit} className="rounded-lg bg-slate-800/50 p-4">
+          <h3 className="mb-3 font-mono text-sm font-medium text-slate-400">
+            Submit feedback (checked-in participants only)
+          </h3>
+          <div className="flex flex-wrap gap-4">
+            <select
+              value={selectedId}
+              onChange={(e) => setSelectedId(e.target.value)}
+              required
+              className="rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+            >
+              <option value="">Select participant</option>
+              {checkedIn.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-500">Rating:</span>
+              {[1, 2, 3, 4, 5].map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setRating(r)}
+                  className={`rounded px-2 py-1 text-sm ${rating >= r ? "text-amber-400" : "text-slate-500"}`}
+                >
+                  ★
+                </button>
+              ))}
+            </div>
+            <input
+              type="text"
+              placeholder="Comment (optional)"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="min-w-[200px] rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white placeholder-slate-500"
+            />
+            <button
+              type="submit"
+              disabled={submitting || !selectedId || rating < 1}
+              className="rounded bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-500 disabled:opacity-50"
+            >
+              {submitting ? "..." : "Submit"}
+            </button>
+          </div>
+        </form>
+      )}
+      <div>
+        <h3 className="mb-3 font-mono text-sm font-medium text-slate-400">
+          Feedback ({feedback.length})
+        </h3>
+        {feedback.length === 0 ? (
+          <p className="text-slate-500">No feedback yet.</p>
+        ) : (
+          <div className="space-y-3">
+            {feedback.map((f) => (
+              <div
+                key={f.id}
+                className="rounded-lg border border-slate-800 bg-slate-800/30 p-3"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-white">{f.participant.name}</span>
+                  <span className="text-amber-400">{"★".repeat(f.rating)}</span>
+                </div>
+                {f.comment && (
+                  <p className="mt-2 text-sm text-slate-400">{f.comment}</p>
+                )}
+                <p className="mt-1 text-xs text-slate-500">
+                  {new Date(f.createdAt).toLocaleString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

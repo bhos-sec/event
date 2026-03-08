@@ -27,6 +27,7 @@ model Event {
   participants  Participant[]
   checkIns      CheckIn[]
   waitlist      WaitlistEntry[]
+  feedback      EventFeedback[]
 
   @@index([startDate])
   @@index([status])
@@ -59,6 +60,7 @@ model Participant {
 
   event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   checkIns    CheckIn[]
+  feedback    EventFeedback[]
 
   @@unique([eventId, email])
   @@index([eventId])
@@ -78,4 +80,19 @@ model CheckIn {
   @@unique([participantId, eventId]) // One check-in per participant per event
   @@index([eventId])
   @@index([checkedInAt])
+}
+
+model EventFeedback {
+  id          String   @id @default(cuid())
+  eventId     String
+  participantId String
+  rating      Int      // 1-5
+  comment     String?
+  createdAt   DateTime @default(now())
+
+  event       Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  participant Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+
+  @@unique([participantId, eventId]) // One feedback per participant per event
+  @@index([eventId])
 }

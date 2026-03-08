@@ -2,13 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma, generateQrToken } from "@/lib/db";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id: eventId } = await params;
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get("search")?.trim().toLowerCase();
+
     const participants = await prisma.participant.findMany({
-      where: { eventId },
+      where: {
+        eventId,
+        ...(search && {
+          OR: [
+            { name: { contains: search, mode: "insensitive" } },
+            { email: { contains: search, mode: "insensitive" } },
+            ...(search.includes("@") ? [] : [{ phone: { contains: search, mode: "insensitive" } }]),
+          ],
+        }),
+      },
       include: {
         _count: { select: { checkIns: true } },
       },
