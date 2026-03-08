@@ -45,6 +45,7 @@ export type EventMinAggregateOutputType = {
   maxParticipants: number | null
   registrationDeadline: Date | null
   status: string | null
+  createdById: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,6 +61,7 @@ export type EventMaxAggregateOutputType = {
   maxParticipants: number | null
   registrationDeadline: Date | null
   status: string | null
+  createdById: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -75,6 +77,7 @@ export type EventCountAggregateOutputType = {
   maxParticipants: number
   registrationDeadline: number
   status: number
+  createdById: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -100,6 +103,7 @@ export type EventMinAggregateInputType = {
   maxParticipants?: true
   registrationDeadline?: true
   status?: true
+  createdById?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -115,6 +119,7 @@ export type EventMaxAggregateInputType = {
   maxParticipants?: true
   registrationDeadline?: true
   status?: true
+  createdById?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -130,6 +135,7 @@ export type EventCountAggregateInputType = {
   maxParticipants?: true
   registrationDeadline?: true
   status?: true
+  createdById?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -232,6 +238,7 @@ export type EventGroupByOutputType = {
   maxParticipants: number | null
   registrationDeadline: Date | null
   status: string
+  createdById: string | null
   createdAt: Date
   updatedAt: Date
   _count: EventCountAggregateOutputType | null
@@ -270,8 +277,10 @@ export type EventWhereInput = {
   maxParticipants?: Prisma.IntNullableFilter<"Event"> | number | null
   registrationDeadline?: Prisma.DateTimeNullableFilter<"Event"> | Date | string | null
   status?: Prisma.StringFilter<"Event"> | string
+  createdById?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   participants?: Prisma.ParticipantListRelationFilter
   checkIns?: Prisma.CheckInListRelationFilter
   waitlist?: Prisma.WaitlistEntryListRelationFilter
@@ -289,8 +298,10 @@ export type EventOrderByWithRelationInput = {
   maxParticipants?: Prisma.SortOrderInput | Prisma.SortOrder
   registrationDeadline?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  createdBy?: Prisma.UserOrderByWithRelationInput
   participants?: Prisma.ParticipantOrderByRelationAggregateInput
   checkIns?: Prisma.CheckInOrderByRelationAggregateInput
   waitlist?: Prisma.WaitlistEntryOrderByRelationAggregateInput
@@ -311,8 +322,10 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   maxParticipants?: Prisma.IntNullableFilter<"Event"> | number | null
   registrationDeadline?: Prisma.DateTimeNullableFilter<"Event"> | Date | string | null
   status?: Prisma.StringFilter<"Event"> | string
+  createdById?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   participants?: Prisma.ParticipantListRelationFilter
   checkIns?: Prisma.CheckInListRelationFilter
   waitlist?: Prisma.WaitlistEntryListRelationFilter
@@ -330,6 +343,7 @@ export type EventOrderByWithAggregationInput = {
   maxParticipants?: Prisma.SortOrderInput | Prisma.SortOrder
   registrationDeadline?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
@@ -353,6 +367,7 @@ export type EventScalarWhereWithAggregatesInput = {
   maxParticipants?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
   registrationDeadline?: Prisma.DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
   status?: Prisma.StringWithAggregatesFilter<"Event"> | string
+  createdById?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
 }
@@ -370,6 +385,7 @@ export type EventCreateInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutEventsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutEventInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryCreateNestedManyWithoutEventInput
@@ -387,6 +403,7 @@ export type EventUncheckedCreateInput = {
   maxParticipants?: number | null
   registrationDeadline?: Date | string | null
   status?: string
+  createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutEventInput
@@ -408,6 +425,7 @@ export type EventUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutEventsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutEventNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUpdateManyWithoutEventNestedInput
@@ -425,6 +443,7 @@ export type EventUncheckedUpdateInput = {
   maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   registrationDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutEventNestedInput
@@ -444,6 +463,7 @@ export type EventCreateManyInput = {
   maxParticipants?: number | null
   registrationDeadline?: Date | string | null
   status?: string
+  createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -474,8 +494,19 @@ export type EventUncheckedUpdateManyInput = {
   maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   registrationDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type EventListRelationFilter = {
+  every?: Prisma.EventWhereInput
+  some?: Prisma.EventWhereInput
+  none?: Prisma.EventWhereInput
+}
+
+export type EventOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type EventCountOrderByAggregateInput = {
@@ -489,6 +520,7 @@ export type EventCountOrderByAggregateInput = {
   maxParticipants?: Prisma.SortOrder
   registrationDeadline?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -508,6 +540,7 @@ export type EventMaxOrderByAggregateInput = {
   maxParticipants?: Prisma.SortOrder
   registrationDeadline?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -523,6 +556,7 @@ export type EventMinOrderByAggregateInput = {
   maxParticipants?: Prisma.SortOrder
   registrationDeadline?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -536,16 +570,46 @@ export type EventScalarRelationFilter = {
   isNot?: Prisma.EventWhereInput
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type EventCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCreatedByInput, Prisma.EventUncheckedCreateWithoutCreatedByInput> | Prisma.EventCreateWithoutCreatedByInput[] | Prisma.EventUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCreatedByInput | Prisma.EventCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.EventCreateManyCreatedByInputEnvelope
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type EventUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCreatedByInput, Prisma.EventUncheckedCreateWithoutCreatedByInput> | Prisma.EventCreateWithoutCreatedByInput[] | Prisma.EventUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCreatedByInput | Prisma.EventCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.EventCreateManyCreatedByInputEnvelope
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
+export type EventUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCreatedByInput, Prisma.EventUncheckedCreateWithoutCreatedByInput> | Prisma.EventCreateWithoutCreatedByInput[] | Prisma.EventUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCreatedByInput | Prisma.EventCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.EventUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.EventCreateManyCreatedByInputEnvelope
+  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  update?: Prisma.EventUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.EventUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.EventUpdateManyWithWhereWithoutCreatedByInput | Prisma.EventUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
+}
+
+export type EventUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCreatedByInput, Prisma.EventUncheckedCreateWithoutCreatedByInput> | Prisma.EventCreateWithoutCreatedByInput[] | Prisma.EventUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCreatedByInput | Prisma.EventCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.EventUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.EventCreateManyCreatedByInputEnvelope
+  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  update?: Prisma.EventUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.EventUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.EventUpdateManyWithWhereWithoutCreatedByInput | Prisma.EventUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
 }
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -616,6 +680,89 @@ export type EventUpdateOneRequiredWithoutFeedbackNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutFeedbackInput, Prisma.EventUpdateWithoutFeedbackInput>, Prisma.EventUncheckedUpdateWithoutFeedbackInput>
 }
 
+export type EventCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  description?: string | null
+  location?: string | null
+  category?: string | null
+  startDate: Date | string
+  endDate?: Date | string | null
+  maxParticipants?: number | null
+  registrationDeadline?: Date | string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  participants?: Prisma.ParticipantCreateNestedManyWithoutEventInput
+  checkIns?: Prisma.CheckInCreateNestedManyWithoutEventInput
+  waitlist?: Prisma.WaitlistEntryCreateNestedManyWithoutEventInput
+  feedback?: Prisma.EventFeedbackCreateNestedManyWithoutEventInput
+}
+
+export type EventUncheckedCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  description?: string | null
+  location?: string | null
+  category?: string | null
+  startDate: Date | string
+  endDate?: Date | string | null
+  maxParticipants?: number | null
+  registrationDeadline?: Date | string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutEventInput
+  checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutEventInput
+  waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
+  feedback?: Prisma.EventFeedbackUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type EventCreateOrConnectWithoutCreatedByInput = {
+  where: Prisma.EventWhereUniqueInput
+  create: Prisma.XOR<Prisma.EventCreateWithoutCreatedByInput, Prisma.EventUncheckedCreateWithoutCreatedByInput>
+}
+
+export type EventCreateManyCreatedByInputEnvelope = {
+  data: Prisma.EventCreateManyCreatedByInput | Prisma.EventCreateManyCreatedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type EventUpsertWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.EventWhereUniqueInput
+  update: Prisma.XOR<Prisma.EventUpdateWithoutCreatedByInput, Prisma.EventUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.EventCreateWithoutCreatedByInput, Prisma.EventUncheckedCreateWithoutCreatedByInput>
+}
+
+export type EventUpdateWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.EventWhereUniqueInput
+  data: Prisma.XOR<Prisma.EventUpdateWithoutCreatedByInput, Prisma.EventUncheckedUpdateWithoutCreatedByInput>
+}
+
+export type EventUpdateManyWithWhereWithoutCreatedByInput = {
+  where: Prisma.EventScalarWhereInput
+  data: Prisma.XOR<Prisma.EventUpdateManyMutationInput, Prisma.EventUncheckedUpdateManyWithoutCreatedByInput>
+}
+
+export type EventScalarWhereInput = {
+  AND?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
+  OR?: Prisma.EventScalarWhereInput[]
+  NOT?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
+  id?: Prisma.StringFilter<"Event"> | string
+  name?: Prisma.StringFilter<"Event"> | string
+  description?: Prisma.StringNullableFilter<"Event"> | string | null
+  location?: Prisma.StringNullableFilter<"Event"> | string | null
+  category?: Prisma.StringNullableFilter<"Event"> | string | null
+  startDate?: Prisma.DateTimeFilter<"Event"> | Date | string
+  endDate?: Prisma.DateTimeNullableFilter<"Event"> | Date | string | null
+  maxParticipants?: Prisma.IntNullableFilter<"Event"> | number | null
+  registrationDeadline?: Prisma.DateTimeNullableFilter<"Event"> | Date | string | null
+  status?: Prisma.StringFilter<"Event"> | string
+  createdById?: Prisma.StringNullableFilter<"Event"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
+}
+
 export type EventCreateWithoutWaitlistInput = {
   id?: string
   name: string
@@ -629,6 +776,7 @@ export type EventCreateWithoutWaitlistInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutEventsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutEventInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutEventInput
   feedback?: Prisma.EventFeedbackCreateNestedManyWithoutEventInput
@@ -645,6 +793,7 @@ export type EventUncheckedCreateWithoutWaitlistInput = {
   maxParticipants?: number | null
   registrationDeadline?: Date | string | null
   status?: string
+  createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutEventInput
@@ -681,6 +830,7 @@ export type EventUpdateWithoutWaitlistInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutEventsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutEventNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutEventNestedInput
   feedback?: Prisma.EventFeedbackUpdateManyWithoutEventNestedInput
@@ -697,6 +847,7 @@ export type EventUncheckedUpdateWithoutWaitlistInput = {
   maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   registrationDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutEventNestedInput
@@ -717,6 +868,7 @@ export type EventCreateWithoutParticipantsInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutEventsInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryCreateNestedManyWithoutEventInput
   feedback?: Prisma.EventFeedbackCreateNestedManyWithoutEventInput
@@ -733,6 +885,7 @@ export type EventUncheckedCreateWithoutParticipantsInput = {
   maxParticipants?: number | null
   registrationDeadline?: Date | string | null
   status?: string
+  createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   checkIns?: Prisma.CheckInUncheckedCreateNestedManyWithoutEventInput
@@ -769,6 +922,7 @@ export type EventUpdateWithoutParticipantsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutEventsNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUpdateManyWithoutEventNestedInput
   feedback?: Prisma.EventFeedbackUpdateManyWithoutEventNestedInput
@@ -785,6 +939,7 @@ export type EventUncheckedUpdateWithoutParticipantsInput = {
   maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   registrationDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutEventNestedInput
@@ -805,6 +960,7 @@ export type EventCreateWithoutCheckInsInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutEventsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryCreateNestedManyWithoutEventInput
   feedback?: Prisma.EventFeedbackCreateNestedManyWithoutEventInput
@@ -821,6 +977,7 @@ export type EventUncheckedCreateWithoutCheckInsInput = {
   maxParticipants?: number | null
   registrationDeadline?: Date | string | null
   status?: string
+  createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutEventInput
@@ -857,6 +1014,7 @@ export type EventUpdateWithoutCheckInsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutEventsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUpdateManyWithoutEventNestedInput
   feedback?: Prisma.EventFeedbackUpdateManyWithoutEventNestedInput
@@ -873,6 +1031,7 @@ export type EventUncheckedUpdateWithoutCheckInsInput = {
   maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   registrationDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutEventNestedInput
@@ -893,6 +1052,7 @@ export type EventCreateWithoutFeedbackInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutEventsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutEventInput
   checkIns?: Prisma.CheckInCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryCreateNestedManyWithoutEventInput
@@ -909,6 +1069,7 @@ export type EventUncheckedCreateWithoutFeedbackInput = {
   maxParticipants?: number | null
   registrationDeadline?: Date | string | null
   status?: string
+  createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutEventInput
@@ -945,6 +1106,7 @@ export type EventUpdateWithoutFeedbackInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutEventsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutEventNestedInput
   checkIns?: Prisma.CheckInUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUpdateManyWithoutEventNestedInput
@@ -961,11 +1123,80 @@ export type EventUncheckedUpdateWithoutFeedbackInput = {
   maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   registrationDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutEventNestedInput
   checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type EventCreateManyCreatedByInput = {
+  id?: string
+  name: string
+  description?: string | null
+  location?: string | null
+  category?: string | null
+  startDate: Date | string
+  endDate?: Date | string | null
+  maxParticipants?: number | null
+  registrationDeadline?: Date | string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type EventUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  registrationDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  participants?: Prisma.ParticipantUpdateManyWithoutEventNestedInput
+  checkIns?: Prisma.CheckInUpdateManyWithoutEventNestedInput
+  waitlist?: Prisma.WaitlistEntryUpdateManyWithoutEventNestedInput
+  feedback?: Prisma.EventFeedbackUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  registrationDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutEventNestedInput
+  checkIns?: Prisma.CheckInUncheckedUpdateManyWithoutEventNestedInput
+  waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
+  feedback?: Prisma.EventFeedbackUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateManyWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  registrationDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1037,8 +1268,10 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   maxParticipants?: boolean
   registrationDeadline?: boolean
   status?: boolean
+  createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  createdBy?: boolean | Prisma.Event$createdByArgs<ExtArgs>
   participants?: boolean | Prisma.Event$participantsArgs<ExtArgs>
   checkIns?: boolean | Prisma.Event$checkInsArgs<ExtArgs>
   waitlist?: boolean | Prisma.Event$waitlistArgs<ExtArgs>
@@ -1057,8 +1290,10 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   maxParticipants?: boolean
   registrationDeadline?: boolean
   status?: boolean
+  createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  createdBy?: boolean | Prisma.Event$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1072,8 +1307,10 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   maxParticipants?: boolean
   registrationDeadline?: boolean
   status?: boolean
+  createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  createdBy?: boolean | Prisma.Event$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectScalar = {
@@ -1087,24 +1324,31 @@ export type EventSelectScalar = {
   maxParticipants?: boolean
   registrationDeadline?: boolean
   status?: boolean
+  createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "location" | "category" | "startDate" | "endDate" | "maxParticipants" | "registrationDeadline" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "location" | "category" | "startDate" | "endDate" | "maxParticipants" | "registrationDeadline" | "status" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  createdBy?: boolean | Prisma.Event$createdByArgs<ExtArgs>
   participants?: boolean | Prisma.Event$participantsArgs<ExtArgs>
   checkIns?: boolean | Prisma.Event$checkInsArgs<ExtArgs>
   waitlist?: boolean | Prisma.Event$waitlistArgs<ExtArgs>
   feedback?: boolean | Prisma.Event$feedbackArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type EventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  createdBy?: boolean | Prisma.Event$createdByArgs<ExtArgs>
+}
+export type EventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  createdBy?: boolean | Prisma.Event$createdByArgs<ExtArgs>
+}
 
 export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Event"
   objects: {
+    createdBy: Prisma.$UserPayload<ExtArgs> | null
     participants: Prisma.$ParticipantPayload<ExtArgs>[]
     checkIns: Prisma.$CheckInPayload<ExtArgs>[]
     waitlist: Prisma.$WaitlistEntryPayload<ExtArgs>[]
@@ -1121,6 +1365,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     maxParticipants: number | null
     registrationDeadline: Date | null
     status: string
+    createdById: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["event"]>
@@ -1517,6 +1762,7 @@ readonly fields: EventFieldRefs;
  */
 export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  createdBy<T extends Prisma.Event$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   participants<T extends Prisma.Event$participantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checkIns<T extends Prisma.Event$checkInsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$checkInsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   waitlist<T extends Prisma.Event$waitlistArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$waitlistArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WaitlistEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1560,6 +1806,7 @@ export interface EventFieldRefs {
   readonly maxParticipants: Prisma.FieldRef<"Event", 'Int'>
   readonly registrationDeadline: Prisma.FieldRef<"Event", 'DateTime'>
   readonly status: Prisma.FieldRef<"Event", 'String'>
+  readonly createdById: Prisma.FieldRef<"Event", 'String'>
   readonly createdAt: Prisma.FieldRef<"Event", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Event", 'DateTime'>
 }
@@ -1811,6 +2058,10 @@ export type EventCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.EventCreateManyInput | Prisma.EventCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1881,6 +2132,10 @@ export type EventUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many Events to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1947,6 +2202,25 @@ export type EventDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Events to delete.
    */
   limit?: number
+}
+
+/**
+ * Event.createdBy
+ */
+export type Event$createdByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

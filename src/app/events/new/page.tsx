@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function NewEventPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
@@ -39,6 +41,7 @@ export default function NewEventPage() {
           maxParticipants: form.maxParticipants ? parseInt(form.maxParticipants, 10) : null,
           registrationDeadline: form.registrationDeadline || null,
           status: form.status,
+          createdByUid: user?.uid ?? undefined,
         }),
       });
 
