@@ -1,50 +1,53 @@
-# Welcome to your Expo app 👋
+# BHOS Event Manager
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A production-ready web app for managing club events with participant registration, QR check-in, attendance analytics, and **authentication**.
+
+## Features
+
+- **Authentication** – Sign in with Google or email/password; create an account
+- **Create & manage events** – Name, description, location, dates, capacity
+- **Participant registration** – Register with name, email, phone
+- **QR check-in** – Unique QR codes; staff can scan or participants open the link
+- **Attendance analytics** – Real-time stats, attendance rate
+- **Participant feedback** – Ratings and comments from checked-in participants
+- **Participant self-service** – View/edit registration, cancel, leave feedback at `/r/[token]`
+- **Search participants** – Filter by name, email, or phone
+- And more (waitlist, bulk import, add to calendar, etc.)
 
 ## Get started
 
-1. Install dependencies
+1. **Install dependencies**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. **Configure environment**
+
+   Copy `.env.example` to `.env` and fill in:
+   - `DATABASE_URL` – PostgreSQL connection string
+   - `NEXT_PUBLIC_FIREBASE_*` – Firebase config for auth (see below)
+
+3. **Set up Firebase (for authentication)**
+
+   - Go to [Firebase Console](https://console.firebase.google.com)
+   - Create a project → Enable **Authentication** → **Google** and **Email/Password**
+   - Add a web app → Copy the config into `.env`
+
+4. **Database**
 
    ```bash
-   npx expo start
+   npm run db:push
    ```
 
-In the output, you'll find options to open the app in a
+5. **Start the app**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   npm run dev
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+   Open [http://localhost:3000](http://localhost:3000). Sign in or create an account to manage events.
 
-## Get a fresh project
+## Without Firebase
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+If you don't set `NEXT_PUBLIC_FIREBASE_API_KEY`, the app runs without auth – all routes are accessible. Useful for local dev.
