@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getDb, toDate } from "@/lib/firestore";
 
 function formatICSDate(d: Date): string {
   return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
@@ -14,15 +14,17 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id } = await params;
-    const event = await prisma.event.findUnique({ where: { id } });
-
-    if (!event) {
+    const doc = await db.collection("events").doc(id).get();
+    if (!doc.exists) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
-
-    const start = new Date(event.startDate);
-    const end = event.endDate ? new Date(event.endDate) : new Date(start.getTime() + 60 * 60 * 1000);
+    const event = doc.data()!;
+    const startDateStr = toDate(event.startDate);
+    const endDateStr = toDate(event.endDate);
+    const start = startDateStr ? new Date(startDateStr) : new Date();
+    const end = endDateStr ? new Date(endDateStr) : new Date(start.getTime() + 60 * 60 * 1000);
     const now = new Date();
 
     const ics = [
@@ -32,7 +34,7 @@ export async function GET(
       "CALSCALE:GREGORIAN",
       "METHOD:PUBLISH",
       "BEGIN:VEVENT",
-      `UID:${event.id}@bhos-events`,
+      `UID:${id}@bhos-events`,
       `DTSTAMP:${formatICSDate(now)}`,
       `DTSTART:${formatICSDate(start)}`,
       `DTEND:${formatICSDate(end)}`,

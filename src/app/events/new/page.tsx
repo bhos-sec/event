@@ -41,7 +41,7 @@ export default function NewEventPage() {
           maxParticipants: form.maxParticipants ? parseInt(form.maxParticipants, 10) : null,
           registrationDeadline: form.registrationDeadline || null,
           status: form.status,
-          createdByUid: user?.uid ?? undefined,
+          createdByUid: user?.uid,
         }),
       });
 

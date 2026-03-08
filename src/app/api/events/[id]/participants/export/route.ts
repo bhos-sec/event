@@ -1,39 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getDb, toDate } from "@/lib/firestore";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id: eventId } = await params;
     const { searchParams } = new URL(request.url);
     const format = searchParams.get("format") || "csv";
 
-    const event = await prisma.event.findUnique({
-      where: { id: eventId },
-    });
-
-    if (!event) {
+    const eventDoc = await db.collection("events").doc(eventId).get();
+    if (!eventDoc.exists) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
+    const event = eventDoc.data()!;
 
-    const participants = await prisma.participant.findMany({
-      where: { eventId },
-      include: {
-        _count: { select: { checkIns: true } },
-      },
-      orderBy: { registeredAt: "asc" },
-    });
+    const participantsSnap = await db.collection("participants").where("eventId", "==", eventId).get();
+    const checkInsSnap = await db.collection("checkIns").where("eventId", "==", eventId).get();
+    const checkedInIds = new Set(checkInsSnap.docs.map((d) => d.data().participantId));
+
+    const participants = participantsSnap.docs
+      .map((doc) => {
+        const d = doc.data();
+        return {
+          id: doc.id,
+          ...d,
+          registeredAt: toDate(d.registeredAt),
+          checkedIn: checkedInIds.has(doc.id),
+        };
+      })
+      .sort((a, b) => (a.registeredAt || "").localeCompare(b.registeredAt || ""));
 
     if (format === "csv") {
       const header = "Name,Email,Phone,Registered At,Checked In\n";
-      const rows = participants.map(
-        (p) =>
-          `"${(p.name || "").replace(/"/g, '""')}","${(p.email || "").replace(/"/g, '""')}","${(p.phone || "").replace(/"/g, '""')}","${new Date(p.registeredAt).toISOString()}",${p._count.checkIns > 0 ? "Yes" : "No"}`
-      ).join("\n");
+      const rows = participants
+        .map(
+          (p) =>
+            `"${(p.name || "").replace(/"/g, '""')}","${(p.email || "").replace(/"/g, '""')}","${(p.phone || "").replace(/"/g, '""')}","${p.registeredAt || ""}",${p.checkedIn ? "Yes" : "No"}`
+        )
+        .join("\n");
       const csv = header + rows;
-
       return new NextResponse(csv, {
         headers: {
           "Content-Type": "text/csv",

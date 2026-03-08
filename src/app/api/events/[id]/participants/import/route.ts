@@ -1,20 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma, generateQrToken } from "@/lib/db";
+import { getDb, generateQrToken } from "@/lib/firestore";
+import { Timestamp } from "firebase-admin/firestore";
+
+function parseCSVLine(line: string): string[] {
+  const result: string[] = [];
+  let current = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') inQuotes = !inQuotes;
+    else if ((c === "," && !inQuotes) || c === "\t") {
+      result.push(current);
+      current = "";
+    } else current += c;
+  }
+  result.push(current);
+  return result;
+}
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id: eventId } = await params;
     const text = await request.text();
 
-    const event = await prisma.event.findUnique({ where: { id: eventId } });
-    if (!event) {
+    const eventDoc = await db.collection("events").doc(eventId).get();
+    if (!eventDoc.exists) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
-
-    if (event.registrationDeadline && new Date() > event.registrationDeadline) {
+    const event = eventDoc.data()!;
+    const deadline = event.registrationDeadline?.toDate?.();
+    if (deadline && new Date() > deadline) {
       return NextResponse.json(
         { error: "Registration has closed" },
         { status: 400 }
@@ -34,11 +53,16 @@ export async function POST(
     const emailIdx = headerCols.findIndex((h) => /email/.test(h)) >= 0 ? headerCols.findIndex((h) => /email/.test(h)) : 1;
     const phoneIdx = headerCols.findIndex((h) => /phone/.test(h));
 
-    const count = await prisma.participant.count({ where: { eventId } });
+    const participantsSnap = await db.collection("participants").where("eventId", "==", eventId).get();
+    const existingEmails = new Set(participantsSnap.docs.map((d) => d.data().email));
+    const waitlistSnap = await db.collection("waitlist").where("eventId", "==", eventId).get();
+    const waitlistEmails = new Set(waitlistSnap.docs.map((d) => d.data().email));
+
     const max = event.maxParticipants ?? Infinity;
     const created: { id: string; name: string; email: string }[] = [];
     const skipped: string[] = [];
     const waitlisted: string[] = [];
+    let count = participantsSnap.size;
 
     for (let i = 1; i < lines.length; i++) {
       const cols = parseCSVLine(lines[i]);
@@ -46,34 +70,37 @@ export async function POST(
       const email = (cols[emailIdx] || "").trim().toLowerCase();
       if (!name || !email) continue;
 
-      const exists = await prisma.participant.findUnique({
-        where: { eventId_email: { eventId, email } },
-      });
-      if (exists) {
+      if (existingEmails.has(email)) {
         skipped.push(email);
         continue;
       }
 
-      if (count + created.length >= max) {
-        await prisma.waitlistEntry.upsert({
-          where: { eventId_email: { eventId, email } },
-          create: { eventId, email, name, phone: phoneIdx >= 0 ? (cols[phoneIdx] || "").trim() || null : null },
-          update: { name },
-        });
-        waitlisted.push(email);
-        continue;
-      }
-
-      const p = await prisma.participant.create({
-        data: {
+      if (count >= max) {
+        const wlRef = db.collection("waitlist").doc();
+        await wlRef.set({
           eventId,
           email,
           name,
           phone: phoneIdx >= 0 ? (cols[phoneIdx] || "").trim() || null : null,
-          qrToken: generateQrToken(),
-        },
+          joinedAt: Timestamp.now(),
+        });
+        waitlisted.push(email);
+        waitlistEmails.add(email);
+        continue;
+      }
+
+      const ref = db.collection("participants").doc();
+      await ref.set({
+        eventId,
+        email,
+        name,
+        phone: phoneIdx >= 0 ? (cols[phoneIdx] || "").trim() || null : null,
+        qrToken: generateQrToken(),
+        registeredAt: Timestamp.now(),
       });
-      created.push({ id: p.id, name: p.name, email: p.email });
+      created.push({ id: ref.id, name, email });
+      existingEmails.add(email);
+      count++;
     }
 
     return NextResponse.json({
@@ -89,23 +116,4 @@ export async function POST(
       { status: 500 }
     );
   }
-}
-
-function parseCSVLine(line: string): string[] {
-  const result: string[] = [];
-  let current = "";
-  let inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (c === '"') {
-      inQuotes = !inQuotes;
-    } else if ((c === "," && !inQuotes) || c === "\t") {
-      result.push(current);
-      current = "";
-    } else {
-      current += c;
-    }
-  }
-  result.push(current);
-  return result;
 }

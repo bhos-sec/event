@@ -40,23 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
       return;
     }
-    const unsubscribe = onAuthStateChanged(auth, async (u) => {
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u);
-      if (u) {
-        try {
-          await fetch("/api/auth/sync", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              uid: u.uid,
-              email: u.email ?? "",
-              name: u.displayName ?? null,
-            }),
-          });
-        } catch (e) {
-          console.error("Failed to sync user to database:", e);
-        }
-      }
       setLoading(false);
     });
     return () => unsubscribe();

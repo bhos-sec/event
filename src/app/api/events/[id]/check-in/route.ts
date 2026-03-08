@@ -24,7 +24,7 @@ export async function POST(
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    let participantSnap: { empty: boolean; docs: FirebaseFirestore.DocumentSnapshot[] };
+    let participantSnap: { empty: boolean; docs: { id: string; data: () => Record<string, unknown> }[] };
     if (qrToken) {
       participantSnap = await db.collection("participants").where("eventId", "==", eventId).where("qrToken", "==", qrToken).get();
     } else {

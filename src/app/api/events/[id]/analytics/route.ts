@@ -1,46 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getDb, toDate } from "@/lib/firestore";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id: eventId } = await params;
 
-    const event = await prisma.event.findUnique({
-      where: { id: eventId },
-      include: {
-        _count: { select: { participants: true, checkIns: true } },
-      },
-    });
-
-    if (!event) {
+    const eventDoc = await db.collection("events").doc(eventId).get();
+    if (!eventDoc.exists) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
+    const eventData = eventDoc.data()!;
 
-    const checkInsByHour = await prisma.$queryRaw<
-      { hour: number; count: bigint }[]
-    >`
-      SELECT EXTRACT(HOUR FROM "checkedInAt")::int as hour, COUNT(*)::bigint as count
-      FROM "CheckIn"
-      WHERE "eventId" = ${eventId}
-      GROUP BY EXTRACT(HOUR FROM "checkedInAt")
-      ORDER BY hour
-    `;
+    const [participantsSnap, checkInsSnap] = await Promise.all([
+      db.collection("participants").where("eventId", "==", eventId).get(),
+      db.collection("checkIns").where("eventId", "==", eventId).get(),
+    ]);
 
-    const totalParticipants = event._count.participants;
-    const totalCheckIns = event._count.checkIns;
+    const totalParticipants = participantsSnap.size;
+    const totalCheckIns = checkInsSnap.size;
     const attendanceRate =
       totalParticipants > 0
         ? Math.round((totalCheckIns / totalParticipants) * 100)
         : 0;
 
+    const hourCounts: Record<number, number> = {};
+    checkInsSnap.docs.forEach((doc) => {
+      const d = doc.data();
+      const ts = d.checkedInAt?.toDate?.();
+      if (ts) {
+        const h = ts.getHours();
+        hourCounts[h] = (hourCounts[h] || 0) + 1;
+      }
+    });
+    const checkInsByHour = Object.entries(hourCounts)
+      .map(([hour, count]) => ({ hour: parseInt(hour, 10), count }))
+      .sort((a, b) => a.hour - b.hour);
+
     return NextResponse.json({
       event: {
-        id: event.id,
-        name: event.name,
-        startDate: event.startDate,
+        id: eventDoc.id,
+        name: eventData.name,
+        startDate: toDate(eventData.startDate),
       },
       summary: {
         totalParticipants,
@@ -48,10 +52,7 @@ export async function GET(
         attendanceRate,
         noShow: totalParticipants - totalCheckIns,
       },
-      checkInsByHour: checkInsByHour.map((r) => ({
-        hour: r.hour,
-        count: Number(r.count),
-      })),
+      checkInsByHour,
     });
   } catch (error) {
     console.error("Failed to fetch analytics:", error);

@@ -1,30 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import QRCode from "qrcode";
-import { prisma } from "@/lib/db";
+import { getDb } from "@/lib/firestore";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id } = await params;
     const { searchParams } = new URL(request.url);
     const format = searchParams.get("format") || "svg";
 
-    const participant = await prisma.participant.findUnique({
-      where: { id },
-      include: { event: true },
-    });
-
-    if (!participant) {
+    const doc = await db.collection("participants").doc(id).get();
+    if (!doc.exists) {
       return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
+    const participant = doc.data()!;
+    const eventId = participant.eventId;
 
-    const checkInUrl = `${request.nextUrl.origin}/check-in/${participant.eventId}?token=${participant.qrToken}`;
+    const checkInUrl = `${request.nextUrl.origin}/check-in/${eventId}?token=${participant.qrToken}`;
     const qrData = JSON.stringify({
       token: participant.qrToken,
-      eventId: participant.eventId,
-      participantId: participant.id,
+      eventId,
+      participantId: id,
       url: checkInUrl,
     });
 
@@ -34,11 +33,10 @@ export async function GET(
         width: 300,
         margin: 2,
       });
-      const uint8 = new Uint8Array(pngBuffer);
-      return new NextResponse(uint8, {
+      return new NextResponse(new Uint8Array(pngBuffer), {
         headers: {
           "Content-Type": "image/png",
-          "Content-Disposition": `inline; filename="qr-${participant.id}.png"`,
+          "Content-Disposition": `inline; filename="qr-${id}.png"`,
         },
       });
     }
@@ -48,11 +46,10 @@ export async function GET(
       width: 300,
       margin: 2,
     });
-
     return new NextResponse(svg, {
       headers: {
         "Content-Type": "image/svg+xml",
-        "Content-Disposition": `inline; filename="qr-${participant.id}.svg"`,
+        "Content-Disposition": `inline; filename="qr-${id}.svg"`,
       },
     });
   } catch (error) {

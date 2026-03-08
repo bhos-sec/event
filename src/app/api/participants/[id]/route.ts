@@ -1,22 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma, generateQrToken } from "@/lib/db";
+import { getDb, generateQrToken, toDate } from "@/lib/firestore";
+import { Timestamp } from "firebase-admin/firestore";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id } = await params;
-    const participant = await prisma.participant.findUnique({
-      where: { id },
-      include: { event: true },
-    });
-
-    if (!participant) {
+    const doc = await db.collection("participants").doc(id).get();
+    if (!doc.exists) {
       return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
-
-    return NextResponse.json(participant);
+    const d = doc.data()!;
+    const eventDoc = await db.collection("events").doc(d.eventId).get();
+    const event = eventDoc.exists ? eventDoc.data()! : {};
+    return NextResponse.json({
+      id: doc.id,
+      ...d,
+      registeredAt: toDate(d.registeredAt),
+      event: {
+        id: d.eventId,
+        name: event.name,
+      },
+    });
   } catch (error) {
     console.error("Failed to fetch participant:", error);
     return NextResponse.json(
@@ -31,16 +39,29 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id } = await params;
     const body = await request.json();
     const { notes } = body;
 
-    const participant = await prisma.participant.update({
-      where: { id },
-      data: { ...(notes !== undefined && { notes: notes?.trim() || null }) },
-    });
+    const doc = await db.collection("participants").doc(id).get();
+    if (!doc.exists) {
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
+    }
 
-    return NextResponse.json(participant);
+    if (notes !== undefined) {
+      await db.collection("participants").doc(id).update({ notes: notes?.trim() || null });
+    }
+
+    const updated = await db.collection("participants").doc(id).get();
+    const d = updated.data()!;
+    const eventDoc = await db.collection("events").doc(d.eventId).get();
+    return NextResponse.json({
+      id: updated.id,
+      ...d,
+      registeredAt: toDate(d.registeredAt),
+      event: eventDoc.exists ? { id: d.eventId, name: eventDoc.data()?.name } : { id: d.eventId, name: null },
+    });
   } catch (error) {
     console.error("Failed to update participant:", error);
     return NextResponse.json(
@@ -55,42 +76,47 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const db = getDb();
     const { id } = await params;
-    const participant = await prisma.participant.findUnique({
-      where: { id },
-      include: { event: true },
-    });
-
-    if (!participant) {
+    const doc = await db.collection("participants").doc(id).get();
+    if (!doc.exists) {
       return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
+    const d = doc.data()!;
+    const eventId = d.eventId;
 
-    const eventId = participant.eventId;
-    const event = participant.event;
-    const maxParticipants = event.maxParticipants;
+    const eventDoc = await db.collection("events").doc(eventId).get();
+    const event = eventDoc.data()!;
+    const maxParticipants = event?.maxParticipants;
 
-    await prisma.participant.delete({ where: { id } });
+    await db.collection("participants").doc(id).delete();
+    const checkInsSnap = await db.collection("checkIns").where("participantId", "==", id).get();
+    for (const c of checkInsSnap.docs) await c.ref.delete();
 
     let promoted: { id: string; name: string; email: string } | null = null;
     if (maxParticipants) {
-      const count = await prisma.participant.count({ where: { eventId } });
-      if (count < maxParticipants) {
-        const first = await prisma.waitlistEntry.findFirst({
-          where: { eventId },
-          orderBy: { joinedAt: "asc" },
+      const countSnap = await db.collection("participants").where("eventId", "==", eventId).get();
+      if (countSnap.size < maxParticipants) {
+        const wlSnap = await db.collection("waitlist").where("eventId", "==", eventId).get();
+        const sorted = wlSnap.docs.sort((a, b) => {
+          const aT = a.data().joinedAt?.toDate?.()?.getTime?.() ?? 0;
+          const bT = b.data().joinedAt?.toDate?.()?.getTime?.() ?? 0;
+          return aT - bT;
         });
-        if (first) {
-          const newParticipant = await prisma.participant.create({
-            data: {
-              eventId,
-              email: first.email,
-              name: first.name,
-              phone: first.phone,
-              qrToken: generateQrToken(),
-            },
+        if (sorted.length > 0) {
+          const first = sorted[0];
+          const wlData = first.data();
+          const newRef = db.collection("participants").doc();
+          await newRef.set({
+            eventId,
+            email: wlData.email,
+            name: wlData.name,
+            phone: wlData.phone,
+            qrToken: generateQrToken(),
+            registeredAt: Timestamp.now(),
           });
-          await prisma.waitlistEntry.delete({ where: { id: first.id } });
-          promoted = { id: newParticipant.id, name: newParticipant.name, email: newParticipant.email };
+          await first.ref.delete();
+          promoted = { id: newRef.id, name: wlData.name, email: wlData.email };
         }
       }
     }
