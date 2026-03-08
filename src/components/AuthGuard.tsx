@@ -14,13 +14,8 @@ function isPublicPath(pathname: string): boolean {
   return false;
 }
 
-const isFirebaseConfigured = !!(
-  typeof window !== "undefined" &&
-  process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.length
-);
-
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading, isFirebaseConfigured } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -31,7 +26,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     if (!user) {
       router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
     }
-  }, [user, loading, pathname, router]);
+  }, [user, loading, pathname, router, isFirebaseConfigured]);
 
   if (isFirebaseConfigured && loading && !isPublicPath(pathname) && !user) {
     return (

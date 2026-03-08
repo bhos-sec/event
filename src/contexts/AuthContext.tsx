@@ -22,6 +22,7 @@ import { auth } from "@/lib/firebase";
 type AuthContextType = {
   user: User | null;
   loading: boolean;
+  isFirebaseConfigured: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
@@ -47,14 +48,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signInWithGoogle = useCallback(async () => {
-    if (!auth) throw new Error("Firebase Auth not configured");
+    if (!auth) {
+      throw new Error("Firebase Auth not configured. Add NEXT_PUBLIC_FIREBASE_* to .env");
+    }
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
   }, []);
 
   const signInWithEmail = useCallback(
     async (email: string, password: string) => {
-      if (!auth) throw new Error("Firebase Auth not configured");
+      if (!auth) {
+        throw new Error("Firebase Auth not configured. Add NEXT_PUBLIC_FIREBASE_* to .env");
+      }
       await signInWithEmailAndPassword(auth, email, password);
     },
     []
@@ -62,7 +67,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUpWithEmail = useCallback(
     async (email: string, password: string) => {
-      if (!auth) throw new Error("Firebase Auth not configured");
+      if (!auth) {
+        throw new Error("Firebase Auth not configured. Add NEXT_PUBLIC_FIREBASE_* to .env");
+      }
       await createUserWithEmailAndPassword(auth, email, password);
     },
     []
@@ -76,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value: AuthContextType = {
     user,
     loading,
+    isFirebaseConfigured: !!auth,
     signInWithGoogle,
     signInWithEmail,
     signUpWithEmail,

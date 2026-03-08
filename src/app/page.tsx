@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen">
       <div className="mx-auto max-w-6xl px-6 py-16">
@@ -13,6 +16,11 @@ export default function Home() {
           <p className="mx-auto max-w-2xl font-sans text-lg text-slate-400">
             Create events, register participants, QR check-in, and track attendance analytics.
           </p>
+          {!user && (
+            <p className="mt-4 text-sm text-slate-500">
+              Sign in or create an account to get started.
+            </p>
+          )}
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -50,14 +58,31 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="mt-12 text-center">
-          <Link
-            href="/events"
-            className="inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-6 py-3 font-medium text-slate-900 transition-colors hover:bg-cyan-400"
-          >
-            View All Events
-            <span className="font-mono">→</span>
-          </Link>
+        <div className="mt-12 flex flex-col items-center gap-4">
+          {user ? (
+            <Link
+              href="/events"
+              className="inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-6 py-3 font-medium text-slate-900 transition-colors hover:bg-cyan-400"
+            >
+              View All Events
+              <span className="font-mono">→</span>
+            </Link>
+          ) : (
+            <div className="flex gap-4">
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-6 py-3 font-medium text-white transition-colors hover:bg-slate-800"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/signup"
+                className="inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-6 py-3 font-medium text-slate-900 transition-colors hover:bg-cyan-400"
+              >
+                Create account
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
