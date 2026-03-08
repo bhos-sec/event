@@ -5,9 +5,9 @@ let db: Firestore | null = null;
 
 function getDb() {
   if (db) return db;
-  const key = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+  const key = process.env.ADMIN_SERVICE_ACCOUNT_KEY;
   if (!key) {
-    throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY (JSON) is required for Firestore");
+    throw new Error("ADMIN_SERVICE_ACCOUNT_KEY (JSON) is required for Firestore");
   }
   const serviceAccount = JSON.parse(key) as ServiceAccount;
   if (getApps().length === 0) {

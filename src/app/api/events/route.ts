@@ -156,12 +156,12 @@ export async function POST(request: NextRequest) {
 
     const msg =
       error instanceof Error ? error.message : "Failed to create event";
-    const isConfigError = msg.includes("FIREBASE_SERVICE_ACCOUNT_KEY");
+    const isConfigError = msg.includes("ADMIN_SERVICE_ACCOUNT_KEY");
 
     return NextResponse.json(
       {
         error: isConfigError
-          ? "Server not configured. Add FIREBASE_SERVICE_ACCOUNT_KEY to .env (local) or Firebase Functions env (production)."
+          ? "Server not configured. Add ADMIN_SERVICE_ACCOUNT_KEY to .env (local) or Firebase Functions env (production)."
           : msg,
       },
       { status: 500 }

@@ -35,7 +35,7 @@ A production-ready web app for managing club events with participant registratio
    Copy `.env.example` to `.env` and fill in:
 
    - `NEXT_PUBLIC_FIREBASE_*` – Firebase web app config (Auth)
-   - `FIREBASE_SERVICE_ACCOUNT_KEY` – Full JSON from Project Settings → Service Accounts → Generate new private key (for Firestore in API routes)
+   - `ADMIN_SERVICE_ACCOUNT_KEY` – Full JSON from Project Settings → Service Accounts → Generate new private key (for Firestore in API routes)
 
 4. **Start the app**
 
@@ -54,10 +54,10 @@ A production-ready web app for managing club events with participant registratio
    firebase deploy
    ```
 
-2. **Production env vars**: Set `FIREBASE_SERVICE_ACCOUNT_KEY` in Firebase Console → Functions → your function → Environment variables (or keep it in `.env` for local deploys).
+2. **Production env vars**: Set `ADMIN_SERVICE_ACCOUNT_KEY` in Firebase Console → Functions → your function → Environment variables (or keep it in `.env` for local deploys).
 
 3. **Blaze plan** required for Cloud Functions (SSR/API routes).
 
 ## Without Firebase Auth
 
-If you don't set `NEXT_PUBLIC_FIREBASE_API_KEY`, the app runs without auth – all routes are accessible. Useful for local dev. Firestore still requires `FIREBASE_SERVICE_ACCOUNT_KEY` for API routes.
+If you don't set `NEXT_PUBLIC_FIREBASE_API_KEY`, the app runs without auth – all routes are accessible. Useful for local dev. Firestore still requires `ADMIN_SERVICE_ACCOUNT_KEY` for API routes.
