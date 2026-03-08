@@ -10,14 +10,14 @@ export default function Home() {
     <div className="min-h-screen">
       <div className="mx-auto max-w-6xl px-6 py-16">
         <div className="mb-16 text-center">
-          <h1 className="mb-4 font-mono text-5xl font-bold tracking-tight text-white md:text-6xl">
+          <h1 className="mb-4 font-mono text-5xl font-bold tracking-tight text-[var(--foreground)] md:text-6xl">
             BHOS Event Manager
           </h1>
-          <p className="mx-auto max-w-2xl font-sans text-lg text-slate-400">
+          <p className="mx-auto max-w-2xl font-sans text-lg text-[var(--muted)]">
             Create events, register participants, QR check-in, and track attendance analytics.
           </p>
           {!user && (
-            <p className="mt-4 text-sm text-slate-500">
+            <p className="mt-4 text-sm text-[var(--muted)]">
               Sign in or create an account to get started.
             </p>
           )}
@@ -26,33 +26,33 @@ export default function Home() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Link
             href="/events"
-            className="group rounded-xl border border-slate-700/50 bg-slate-800/30 p-6 transition-all hover:border-cyan-500/50 hover:bg-slate-800/50"
+            className="group rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] p-6 transition-all hover:border-[var(--accent)]/50 hover:ring-2 hover:ring-[var(--accent)]/20"
           >
-            <div className="mb-3 font-mono text-2xl text-cyan-400">/events</div>
-            <h2 className="mb-2 font-semibold text-white">Manage Events</h2>
-            <p className="text-sm text-slate-400">
+            <div className="mb-3 font-mono text-2xl text-[var(--accent)]">/events</div>
+            <h2 className="mb-2 font-semibold text-[var(--foreground)]">Manage Events</h2>
+            <p className="text-sm text-[var(--muted)]">
               Create, edit, and organize club events with full details.
             </p>
           </Link>
 
           <Link
             href="/events"
-            className="group rounded-xl border border-slate-700/50 bg-slate-800/30 p-6 transition-all hover:border-cyan-500/50 hover:bg-slate-800/50"
+            className="group rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] p-6 transition-all hover:border-[var(--accent)]/50 hover:ring-2 hover:ring-[var(--accent)]/20"
           >
-            <div className="mb-3 font-mono text-2xl text-cyan-400">/register</div>
-            <h2 className="mb-2 font-semibold text-white">Participant Registration</h2>
-            <p className="text-sm text-slate-400">
+            <div className="mb-3 font-mono text-2xl text-[var(--accent)]">/register</div>
+            <h2 className="mb-2 font-semibold text-[var(--foreground)]">Participant Registration</h2>
+            <p className="text-sm text-[var(--muted)]">
               Register attendees and generate unique QR codes for check-in.
             </p>
           </Link>
 
           <Link
             href="/events"
-            className="group rounded-xl border border-slate-700/50 bg-slate-800/30 p-6 transition-all hover:border-cyan-500/50 hover:bg-slate-800/50"
+            className="group rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] p-6 transition-all hover:border-[var(--accent)]/50 hover:ring-2 hover:ring-[var(--accent)]/20"
           >
-            <div className="mb-3 font-mono text-2xl text-cyan-400">/analytics</div>
-            <h2 className="mb-2 font-semibold text-white">Attendance Analytics</h2>
-            <p className="text-sm text-slate-400">
+            <div className="mb-3 font-mono text-2xl text-[var(--accent)]">/analytics</div>
+            <h2 className="mb-2 font-semibold text-[var(--foreground)]">Attendance Analytics</h2>
+            <p className="text-sm text-[var(--muted)]">
               Real-time attendance rates and check-in insights.
             </p>
           </Link>
@@ -62,7 +62,7 @@ export default function Home() {
           {user ? (
             <Link
               href="/events"
-              className="inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-6 py-3 font-medium text-slate-900 transition-colors hover:bg-cyan-400"
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-6 py-3 font-medium text-[var(--background)] transition-colors hover:bg-[var(--accent-dim)]"
             >
               View All Events
               <span className="font-mono">→</span>
@@ -71,13 +71,13 @@ export default function Home() {
             <div className="flex gap-4">
               <Link
                 href="/login"
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-6 py-3 font-medium text-white transition-colors hover:bg-slate-800"
+                className="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] px-6 py-3 font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--surface-hover)]"
               >
                 Sign in
               </Link>
               <Link
                 href="/signup"
-                className="inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-6 py-3 font-medium text-slate-900 transition-colors hover:bg-cyan-400"
+                className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-6 py-3 font-medium text-[var(--background)] transition-colors hover:bg-[var(--accent-dim)]"
               >
                 Create account
               </Link>
