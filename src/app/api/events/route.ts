@@ -9,17 +9,28 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search")?.toLowerCase().trim() || "";
     const status = searchParams.get("status") || "";
 
+    type EventDoc = {
+      name?: string; description?: string; location?: string; status?: string;
+      startDate?: unknown; endDate?: unknown; registrationDeadline?: unknown;
+      createdAt?: unknown; updatedAt?: unknown;
+    };
     const snapshot = await db.collection("events").orderBy("startDate", "desc").get();
     let events = snapshot.docs.map((doc) => {
-      const d = doc.data();
+      const d = doc.data() as EventDoc;
+      const toIso = (v: unknown) =>
+        (v as { toDate?: () => Date })?.toDate?.()?.toISOString?.() ?? (typeof v === "string" ? v : null);
       return {
         id: doc.id,
         ...d,
-        startDate: d.startDate?.toDate?.()?.toISOString?.() ?? d.startDate,
-        endDate: d.endDate?.toDate?.()?.toISOString?.() ?? d.endDate,
-        registrationDeadline: d.registrationDeadline?.toDate?.()?.toISOString?.() ?? d.registrationDeadline,
-        createdAt: d.createdAt?.toDate?.()?.toISOString?.() ?? d.createdAt,
-        updatedAt: d.updatedAt?.toDate?.()?.toISOString?.() ?? d.updatedAt,
+        name: d.name ?? null,
+        description: d.description ?? null,
+        location: d.location ?? null,
+        status: d.status ?? "draft",
+        startDate: toIso(d.startDate),
+        endDate: toIso(d.endDate),
+        registrationDeadline: toIso(d.registrationDeadline),
+        createdAt: toIso(d.createdAt),
+        updatedAt: toIso(d.updatedAt),
         _count: { participants: 0, checkIns: 0 },
       };
     });
