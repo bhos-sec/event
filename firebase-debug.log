@@ -1,0 +1,157 @@
+[debug] [2026-03-08T12:07:41.266Z] ----------------------------------------------------------------------
+[debug] [2026-03-08T12:07:41.268Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\eminb\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2026-03-08T12:07:41.268Z] CLI Version:   15.7.0
+[debug] [2026-03-08T12:07:41.268Z] Platform:      win32
+[debug] [2026-03-08T12:07:41.269Z] Node Version:  v22.19.0
+[debug] [2026-03-08T12:07:41.269Z] Time:          Sun Mar 08 2026 16:07:41 GMT+0400 (Azerbaijan Standard Time)
+[debug] [2026-03-08T12:07:41.269Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-08T12:07:42.354Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-08T12:07:42.354Z] > authorizing via signed-in user (emin.baxisli2005@gmail.com)
+[debug] [2026-03-08T12:07:42.354Z] [iam] checking project neuroquac for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-03-08T12:07:42.355Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:07:42.355Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:07:42.356Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions [none]
+[debug] [2026-03-08T12:07:42.356Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions  x-goog-user-project=neuroquac
+[debug] [2026-03-08T12:07:42.356Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-08T12:07:43.334Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions 200
+[debug] [2026-03-08T12:07:43.334Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/neuroquac:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-08T12:07:43.334Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:07:43.334Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:07:43.335Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/neuroquac [none]
+[debug] [2026-03-08T12:07:43.808Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/neuroquac 200
+[debug] [2026-03-08T12:07:43.808Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/neuroquac {"projectId":"neuroquac","projectNumber":"304569076541","displayName":"neuroquac","name":"projects/neuroquac","resources":{"hostingSite":"neuroquac"},"state":"ACTIVE","etag":"1_61561816-5a67-4a4f-aa5e-c482a528342f"}
+[debug] [2026-03-08T12:07:45.652Z] defaultcredentials: writing to file C:\Users\eminb\AppData\Roaming\firebase\emin_baxisli2005_gmail.com_application_default_credentials.json
+[debug] [2026-03-08T12:07:45.653Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:07:45.653Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:07:45.654Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites pageToken=&pageSize=10
+[debug] [2026-03-08T12:07:46.761Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites 200
+[debug] [2026-03-08T12:07:46.761Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites {"sites":[{"name":"projects/neuroquac/sites/neuroquac","defaultUrl":"https://neuroquac.web.app","appId":"1:304569076541:web:e845ff81d45b0832e51354","type":"DEFAULT_SITE"}]}
+[debug] [2026-03-08T12:07:46.762Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:07:46.762Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:07:46.762Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:304569076541:web:e845ff81d45b0832e51354/config [none]
+[debug] [2026-03-08T12:07:47.426Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:304569076541:web:e845ff81d45b0832e51354/config 200
+[debug] [2026-03-08T12:07:47.427Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:304569076541:web:e845ff81d45b0832e51354/config {"projectId":"neuroquac","appId":"1:304569076541:web:e845ff81d45b0832e51354","storageBucket":"neuroquac.firebasestorage.app","apiKey":"AIzaSyBOcy-uAhbwYuJyeQXCZsTk1VC4e3wZEwY","authDomain":"neuroquac.firebaseapp.com","messagingSenderId":"304569076541","measurementId":"G-4MKX78E8L6","projectNumber":"304569076541","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-03-08T12:07:51.454Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:07:51.454Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:07:51.454Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac [none]
+[debug] [2026-03-08T12:07:52.214Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac 200
+[debug] [2026-03-08T12:07:52.214Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac {"name":"projects/neuroquac/sites/neuroquac","defaultUrl":"https://neuroquac.web.app","appId":"1:304569076541:web:e845ff81d45b0832e51354","type":"DEFAULT_SITE"}
+[info]    ▲ Next.js 15.5.12
+
+[info]    - Environments: .env.local, .env
+
+
+[info]    Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully in 2.7s
+
+[info]    Linting and checking validity of types ...
+
+[info] 
+./src/app/events/[id]/page.tsx
+61:10  Warning: 'waitlist' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+64:10  Warning: 'importLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+64:25  Warning: 'setImportLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+112:6  Warning: React Hook useEffect has a missing dependency: 'fetchParticipants'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/participants/[id]/qr/page.tsx
+52:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+
+[info]    Collecting page data ...
+
+[info]    Generating static pages (0/10) ...
+
+[info]    Generating static pages (2/10) 
+
+[info]    Generating static pages (4/10) 
+
+[info]    Generating static pages (7/10) 
+
+[info]  ✓ Generating static pages (10/10)
+
+[info]    Finalizing page optimization ...
+
+[info]    Collecting build traces ...
+
+[info] 
+
+[info] Route (app)                                  Size  First Load JS
+┌ ○ /                                     1.54 kB         143 kB
+├ ○ /_not-found                             990 B         103 kB
+├ ƒ /api/events                             158 B         102 kB
+├ ƒ /api/events/[id]                        158 B         102 kB
+├ ƒ /api/events/[id]/analytics              158 B         102 kB
+├ ƒ /api/events/[id]/calendar               158 B         102 kB
+├ ƒ /api/events/[id]/check-in               158 B         102 kB
+├ ƒ /api/events/[id]/check-in/bulk          158 B         102 kB
+├ ƒ /api/events/[id]/duplicate              158 B         102 kB
+├ ƒ /api/events/[id]/feedback               158 B         102 kB
+├ ƒ /api/events/[id]/participants           158 B         102 kB
+├ ƒ /api/events/[id]/participants/export    158 B         102 kB
+├ ƒ /api/events/[id]/participants/import    158 B         102 kB
+├ ƒ /api/events/[id]/waitlist               158 B         102 kB
+├ ƒ /api/participants/[id]                  158 B         102 kB
+├ ƒ /api/participants/[id]/qr               158 B         102 kB
+├ ƒ /api/r/[token]                          158 B         102 kB
+├ ƒ /check-in/[id]                         111 kB         252 kB
+├ ○ /events                               1.42 kB         107 kB
+├ ƒ /events/[id]                          6.26 kB         147 kB
+├ ƒ /events/[id]/edit                     3.42 kB         144 kB
+├ ○ /events/new                           2.38 kB         143 kB
+├ ○ /login                                2.27 kB         143 kB
+├ ƒ /participants/[id]/qr                 2.57 kB         144 kB
+├ ƒ /r/[token]                            3.89 kB         145 kB
+└ ○ /signup                               2.31 kB         143 kB
++ First Load JS shared by all              102 kB
+  ├ chunks/255-ebd51be49873d76c.js          46 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js   54.2 kB
+  └ other shared chunks (total)              2 kB
+
+
+
+[info] ○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • non-static component /api/events/[id]/calendar/route
+[info]  • non-static component /api/events/[id]/check-in/bulk/route
+[info]  • non-static component /api/events/[id]/duplicate/route
+[info]  • non-static component /api/events/[id]/analytics/route
+[info]  • non-static component /api/events/[id]/check-in/route
+[debug] [2026-03-08T12:08:19.090Z]  • non-static component /api/events/[id]/feedback/route
+[debug] [2026-03-08T12:08:19.090Z]  • non-static component /api/events/[id]/participants/import/route
+[debug] [2026-03-08T12:08:19.090Z]  • non-static component /api/events/[id]/participants/export/route
+[debug] [2026-03-08T12:08:19.090Z]  • non-static component /api/events/[id]/participants/route
+[debug] [2026-03-08T12:08:19.090Z]  • non-static component /api/events/[id]/route
+[debug] [2026-03-08T12:08:19.090Z]  • non-static component /api/events/route
+[debug] [2026-03-08T12:08:19.090Z]  • non-static component /api/events/[id]/waitlist/route
+[debug] [2026-03-08T12:08:19.090Z]  • non-static component /api/participants/[id]/qr/route
+[debug] [2026-03-08T12:08:19.090Z]  • non-static component /api/participants/[id]/route
+[debug] [2026-03-08T12:08:19.091Z]  • non-static component /api/r/[token]/route
+[debug] [2026-03-08T12:08:19.091Z]  • non-static component /events/[id]/edit/page
+[debug] [2026-03-08T12:08:19.091Z]  • non-static component /events/[id]/page
+[debug] [2026-03-08T12:08:19.091Z]  • non-static component /check-in/[id]/page
+[debug] [2026-03-08T12:08:19.091Z]  • non-static component /r/[token]/page
+[debug] [2026-03-08T12:08:19.091Z]  • non-static component /participants/[id]/qr/page
+[info]  • and 15 other reasons, use --debug to see more
+[info] 
+[debug] [2026-03-08T12:08:19.291Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:08:19.291Z] Checked if tokens are valid: true, expires at: 1772974228454
+[debug] [2026-03-08T12:08:19.291Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac [none]
+[debug] [2026-03-08T12:08:20.292Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac 200
+[debug] [2026-03-08T12:08:20.293Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/neuroquac/sites/neuroquac {"name":"projects/neuroquac/sites/neuroquac","defaultUrl":"https://neuroquac.web.app","appId":"1:304569076541:web:e845ff81d45b0832e51354","type":"DEFAULT_SITE"}
