@@ -88,18 +88,52 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const start = new Date(startDate);
+    if (Number.isNaN(start.getTime())) {
+      return NextResponse.json(
+        { error: "Invalid start date format" },
+        { status: 400 }
+      );
+    }
+
+    const end = endDate ? new Date(endDate) : null;
+    if (end && Number.isNaN(end.getTime())) {
+      return NextResponse.json(
+        { error: "Invalid end date format" },
+        { status: 400 }
+      );
+    }
+
+    const regDeadline = registrationDeadline ? new Date(registrationDeadline) : null;
+    if (regDeadline && Number.isNaN(regDeadline.getTime())) {
+      return NextResponse.json(
+        { error: "Invalid registration deadline format" },
+        { status: 400 }
+      );
+    }
+
+    let max = null;
+    if (maxParticipants != null && maxParticipants !== "") {
+      const parsed = parseInt(String(maxParticipants), 10);
+      if (Number.isNaN(parsed) || parsed < 1) {
+        return NextResponse.json(
+          { error: "Max participants must be a positive number" },
+          { status: 400 }
+        );
+      }
+      max = parsed;
+    }
+
     const eventRef = db.collection("events").doc();
     const event = {
-      name,
-      description: description || null,
-      location: location || null,
+      name: String(name).trim(),
+      description: description ? String(description).trim() : null,
+      location: location ? String(location).trim() : null,
       category: category?.trim() || null,
-      startDate: Timestamp.fromDate(new Date(startDate)),
-      endDate: endDate ? Timestamp.fromDate(new Date(endDate)) : null,
-      maxParticipants: maxParticipants ? parseInt(maxParticipants, 10) : null,
-      registrationDeadline: registrationDeadline
-        ? Timestamp.fromDate(new Date(registrationDeadline))
-        : null,
+      startDate: Timestamp.fromDate(start),
+      endDate: end ? Timestamp.fromDate(end) : null,
+      maxParticipants: max,
+      registrationDeadline: regDeadline ? Timestamp.fromDate(regDeadline) : null,
       status: status === "published" || status === "cancelled" ? status : "draft",
       createdByUid: createdByUid || null,
       createdAt: Timestamp.now(),
@@ -119,8 +153,17 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Failed to create event:", error);
+
+    const msg =
+      error instanceof Error ? error.message : "Failed to create event";
+    const isConfigError = msg.includes("FIREBASE_SERVICE_ACCOUNT_KEY");
+
     return NextResponse.json(
-      { error: "Failed to create event" },
+      {
+        error: isConfigError
+          ? "Server not configured. Add FIREBASE_SERVICE_ACCOUNT_KEY to .env (local) or Firebase Functions env (production)."
+          : msg,
+      },
       { status: 500 }
     );
   }

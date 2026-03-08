@@ -1,7 +1,18 @@
 {
   "hosting": {
     "source": ".",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "**/event/**",
+      "**/.firebase/**",
+      "docker-compose.yml",
+      "eas.json",
+      "app.json",
+      "expo-env.d.ts",
+      "DEPLOY.md"
+    ],
     "frameworksBackend": {
       "region": "us-central1"
     }
