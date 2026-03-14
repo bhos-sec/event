@@ -44,7 +44,7 @@ export function GoogleSignInButton({
       type="button"
       onClick={handleClick}
       disabled={disabled}
-      className="mb-4 flex w-full items-center justify-center gap-3 rounded-lg border border-slate-600 bg-slate-800 px-4 py-3 font-medium text-white transition-colors hover:bg-slate-700 disabled:opacity-50"
+      className="mb-4 flex w-full items-center justify-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-3 font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--border)] disabled:opacity-50"
     >
       <svg className="h-5 w-5" viewBox="0 0 24 24">
         <path

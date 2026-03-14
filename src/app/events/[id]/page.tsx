@@ -264,7 +264,7 @@ export default function EventDetailPage() {
     return (
       <div className="min-h-screen bg-[var(--background)]">
         <div className="flex items-center justify-center py-32">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent" />
         </div>
       </div>
     );
@@ -299,7 +299,7 @@ export default function EventDetailPage() {
               <p className="mt-1 text-[var(--muted)]">📍 {event.location}</p>
             )}
             {event.description && (
-              <p className="mt-3 text-slate-400">{event.description}</p>
+              <p className="mt-3 text-[var(--muted)]">{event.description}</p>
             )}
           </div>
           <div className="flex flex-wrap gap-3">
@@ -309,48 +309,48 @@ export default function EventDetailPage() {
                   ? "bg-emerald-500/20 text-emerald-400"
                   : event.status === "cancelled"
                     ? "bg-red-500/20 text-red-400"
-                    : "bg-slate-600/50 text-slate-400"
+                    : "bg-[var(--surface-hover)] text-[var(--muted)]"
               }`}
             >
               {event.status}
             </span>
             <Link
               href={`/check-in/${id}`}
-              className="inline-flex items-center gap-2 rounded-lg bg-cyan-500/20 px-4 py-2 font-mono text-sm font-medium text-cyan-400 ring-1 ring-cyan-500/50 hover:bg-cyan-500/30"
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)]/20 px-4 py-2 font-mono text-sm font-medium text-[var(--accent)] ring-1 ring-[var(--accent)]/50 hover:bg-[var(--accent)]/30"
             >
               📱 QR Check-in
             </Link>
             <a
               href={`/api/events/${id}/calendar`}
               download={`${event.name.replace(/[^a-z0-9]/gi, "_")}.ics`}
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--surface-hover)] px-4 py-2 font-mono text-sm text-[var(--foreground)] ring-1 ring-[var(--border)] hover:bg-[var(--border)]"
             >
               📅 Add to Calendar
             </a>
             <a
               href={`/api/events/${id}/participants/export?format=csv`}
               download
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--surface-hover)] px-4 py-2 font-mono text-sm text-[var(--foreground)] ring-1 ring-[var(--border)] hover:bg-[var(--border)]"
             >
               📥 Export CSV
             </a>
             <button
               type="button"
               onClick={() => window.print()}
-              className="no-print inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
+              className="no-print inline-flex items-center gap-2 rounded-lg bg-[var(--surface-hover)] px-4 py-2 font-mono text-sm text-[var(--foreground)] ring-1 ring-[var(--border)] hover:bg-[var(--border)]"
             >
               🖨️ Print
             </button>
             <button
               onClick={handleDuplicate}
               disabled={dupLoading}
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--surface-hover)] px-4 py-2 font-mono text-sm text-[var(--foreground)] ring-1 ring-[var(--border)] hover:bg-[var(--border)] disabled:opacity-50"
             >
               {dupLoading ? "..." : "📋 Duplicate"}
             </button>
             <Link
               href={`/events/${id}/edit`}
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 font-mono text-sm text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700"
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--surface-hover)] px-4 py-2 font-mono text-sm text-[var(--foreground)] ring-1 ring-[var(--border)] hover:bg-[var(--border)]"
             >
               Edit Event
             </Link>
@@ -375,14 +375,14 @@ export default function EventDetailPage() {
           <StatCard label="Capacity" value={isFull ? "Full" : "Open"} />
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-          <div className="mb-6 flex flex-wrap gap-4 border-b border-slate-800 pb-4">
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] p-6">
+          <div className="mb-6 flex flex-wrap gap-4 border-b border-[var(--border)] pb-4">
             <button
               onClick={() => setActiveTab("participants")}
               className={`font-mono text-sm font-medium ${
                 activeTab === "participants"
-                  ? "text-cyan-400"
-                  : "text-slate-500 hover:text-slate-300"
+                  ? "text-[var(--accent)]"
+                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
             >
               Participants
@@ -391,8 +391,8 @@ export default function EventDetailPage() {
               onClick={() => setActiveTab("analytics")}
               className={`font-mono text-sm font-medium ${
                 activeTab === "analytics"
-                  ? "text-cyan-400"
-                  : "text-slate-500 hover:text-slate-300"
+                  ? "text-[var(--accent)]"
+                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
             >
               Analytics
@@ -401,8 +401,8 @@ export default function EventDetailPage() {
               onClick={() => setActiveTab("feedback")}
               className={`font-mono text-sm font-medium ${
                 activeTab === "feedback"
-                  ? "text-cyan-400"
-                  : "text-slate-500 hover:text-slate-300"
+                  ? "text-[var(--accent)]"
+                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
             >
               Feedback
@@ -417,7 +417,7 @@ export default function EventDetailPage() {
                   placeholder="Search by name, email, phone..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="max-w-xs rounded border border-slate-700 bg-slate-800 px-3 py-2 font-mono text-sm text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                  className="max-w-xs rounded border border-[var(--border)] bg-[var(--surface-hover)] px-3 py-2 font-mono text-sm text-[var(--foreground)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                 />
                 {selectedIds.size > 0 && (
                   <button
@@ -445,7 +445,7 @@ export default function EventDetailPage() {
               {!isFull && (
                 <form
                   onSubmit={handleRegister}
-                  className="flex flex-wrap gap-3 rounded-lg bg-slate-800/50 p-4"
+                  className="flex flex-wrap gap-3 rounded-lg bg-[var(--surface-hover)] p-4"
                 >
                   <input
                     type="text"
@@ -453,7 +453,7 @@ export default function EventDetailPage() {
                     value={regForm.name}
                     onChange={(e) => setRegForm((f) => ({ ...f, name: e.target.value }))}
                     required
-                    className="rounded border border-slate-700 bg-slate-900 px-3 py-2 font-mono text-sm text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                    className="rounded border border-[var(--border)] bg-[var(--surface-hover)] px-3 py-2 font-mono text-sm text-[var(--foreground)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                   />
                   <input
                     type="email"
@@ -461,19 +461,19 @@ export default function EventDetailPage() {
                     value={regForm.email}
                     onChange={(e) => setRegForm((f) => ({ ...f, email: e.target.value }))}
                     required
-                    className="rounded border border-slate-700 bg-slate-900 px-3 py-2 font-mono text-sm text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                    className="rounded border border-[var(--border)] bg-[var(--surface-hover)] px-3 py-2 font-mono text-sm text-[var(--foreground)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                   />
                   <input
                     type="tel"
                     placeholder="Phone"
                     value={regForm.phone}
                     onChange={(e) => setRegForm((f) => ({ ...f, phone: e.target.value }))}
-                    className="rounded border border-slate-700 bg-slate-900 px-3 py-2 font-mono text-sm text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                    className="rounded border border-[var(--border)] bg-[var(--surface-hover)] px-3 py-2 font-mono text-sm text-[var(--foreground)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                   />
                   <button
                     type="submit"
                     disabled={regLoading}
-                    className="rounded bg-cyan-600 px-4 py-2 font-mono text-sm font-medium text-white hover:bg-cyan-500 disabled:opacity-50"
+                    className="rounded bg-[var(--accent)] px-4 py-2 font-mono text-sm font-medium text-[var(--background)] hover:bg-[var(--accent-dim)] disabled:opacity-50"
                   >
                     {regLoading ? "..." : "Register"}
                   </button>
@@ -486,7 +486,7 @@ export default function EventDetailPage() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-slate-700 text-left text-xs text-slate-500">
+                    <tr className="border-b border-[var(--border)] text-left text-xs text-[var(--muted)]">
                       <th className="pb-3 pr-2">
                         <input
                           type="checkbox"
@@ -500,7 +500,7 @@ export default function EventDetailPage() {
                             const pending = participants.filter((p) => p._count.checkIns === 0);
                             setSelectedIds(e.target.checked ? new Set(pending.map((p) => p.id)) : new Set());
                           }}
-                          className="rounded border-slate-600"
+                          className="rounded border-[var(--border)]"
                         />
                       </th>
                       <th className="pb-3 font-mono">Name</th>
@@ -514,7 +514,7 @@ export default function EventDetailPage() {
                     {participants.map((p) => (
                       <tr
                         key={p.id}
-                        className="border-b border-slate-800/50 text-sm text-slate-300"
+                        className="border-b border-[var(--border)] text-sm text-[var(--foreground)]"
                       >
                         <td className="py-3 pr-2">
                           {p._count.checkIns === 0 && (
@@ -529,18 +529,18 @@ export default function EventDetailPage() {
                                   return next;
                                 });
                               }}
-                              className="rounded border-slate-600"
+                              className="rounded border-[var(--border)]"
                             />
                           )}
                         </td>
-                        <td className="py-3 font-medium text-white">{p.name}</td>
+                        <td className="py-3 font-medium text-[var(--foreground)]">{p.name}</td>
                         <td className="py-3">{p.email}</td>
                         <td className="py-3">
                           <span
                             className={`inline-flex rounded px-2 py-0.5 text-xs ${
                               p._count.checkIns > 0
                                 ? "bg-emerald-500/20 text-emerald-400"
-                                : "bg-slate-700 text-slate-400"
+                                : "bg-[var(--surface-hover)] text-[var(--muted)]"
                             }`}
                           >
                             {p._count.checkIns > 0 ? "Checked in" : "Pending"}
@@ -550,7 +550,7 @@ export default function EventDetailPage() {
                           <Link
                             href={`/participants/${p.id}/qr`}
                             target="_blank"
-                            className="text-cyan-400 hover:underline"
+                            className="text-[var(--accent)] hover:underline"
                           >
                             View QR
                           </Link>
@@ -560,7 +560,7 @@ export default function EventDetailPage() {
                               <Link
                                 href={`/r/${p.qrToken}`}
                                 target="_blank"
-                                className="text-slate-400 hover:text-cyan-400"
+                                className="text-[var(--muted)] hover:text-[var(--accent)]"
                               >
                                 Manage
                               </Link>
@@ -570,12 +570,12 @@ export default function EventDetailPage() {
                         <td className="py-3">
                           <div className="flex flex-wrap gap-1">
                             {p._count.checkIns > 0 ? (
-                              <span className="text-slate-500 text-xs">—</span>
+                              <span className="text-[var(--muted)] text-xs">—</span>
                             ) : (
                               <button
                                 onClick={() => handleManualCheckIn(p.id)}
                                 disabled={checkInLoading === p.id}
-                                className="rounded bg-emerald-600/80 px-2 py-1 text-xs font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
+                                className="rounded bg-emerald-600 px-2 py-1 text-xs font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
                               >
                                 {checkInLoading === p.id ? "..." : "Check In"}
                               </button>
@@ -593,7 +593,7 @@ export default function EventDetailPage() {
                   </tbody>
                 </table>
                 {participants.length === 0 && (
-                  <p className="py-8 text-center text-slate-500">
+                  <p className="py-8 text-center text-[var(--muted)]">
                     No participants yet. Register above.
                   </p>
                 )}
@@ -604,26 +604,26 @@ export default function EventDetailPage() {
           {activeTab === "analytics" && analytics && (
             <div className="space-y-6">
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <div className="rounded-lg bg-slate-800/50 p-4">
-                  <p className="text-xs text-slate-500">Total Registered</p>
-                  <p className="mt-1 font-mono text-2xl text-white">
+                <div className="rounded-lg bg-[var(--surface-hover)] p-4">
+                  <p className="text-xs text-[var(--muted)]">Total Registered</p>
+                  <p className="mt-1 font-mono text-2xl text-[var(--foreground)]">
                     {analytics.summary.totalParticipants}
                   </p>
                 </div>
-                <div className="rounded-lg bg-slate-800/50 p-4">
-                  <p className="text-xs text-slate-500">Checked In</p>
+                <div className="rounded-lg bg-[var(--surface-hover)] p-4">
+                  <p className="text-xs text-[var(--muted)]">Checked In</p>
                   <p className="mt-1 font-mono text-2xl text-emerald-400">
                     {analytics.summary.totalCheckIns}
                   </p>
                 </div>
-                <div className="rounded-lg bg-slate-800/50 p-4">
-                  <p className="text-xs text-slate-500">Attendance Rate</p>
-                  <p className="mt-1 font-mono text-2xl text-cyan-400">
+                <div className="rounded-lg bg-[var(--surface-hover)] p-4">
+                  <p className="text-xs text-[var(--muted)]">Attendance Rate</p>
+                  <p className="mt-1 font-mono text-2xl text-[var(--accent)]">
                     {analytics.summary.attendanceRate}%
                   </p>
                 </div>
-                <div className="rounded-lg bg-slate-800/50 p-4">
-                  <p className="text-xs text-slate-500">No-show</p>
+                <div className="rounded-lg bg-[var(--surface-hover)] p-4">
+                  <p className="text-xs text-[var(--muted)]">No-show</p>
                   <p className="mt-1 font-mono text-2xl text-amber-400">
                     {analytics.summary.noShow}
                   </p>
@@ -631,19 +631,19 @@ export default function EventDetailPage() {
               </div>
               {analytics.checkInsByHour.length > 0 && (
                 <div>
-                  <h3 className="mb-3 font-mono text-sm font-medium text-slate-400">
+                  <h3 className="mb-3 font-mono text-sm font-medium text-[var(--muted)]">
                     Check-ins by hour
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {analytics.checkInsByHour.map(({ hour, count }) => (
                       <div
                         key={hour}
-                        className="flex items-center gap-2 rounded bg-slate-800 px-3 py-2"
+                        className="flex items-center gap-2 rounded bg-[var(--surface-hover)] px-3 py-2"
                       >
-                        <span className="font-mono text-xs text-slate-500">
+                        <span className="font-mono text-xs text-[var(--muted)]">
                           {hour.toString().padStart(2, "0")}:00
                         </span>
-                        <span className="font-mono text-sm text-cyan-400">
+                        <span className="font-mono text-sm text-[var(--accent)]">
                           {count}
                         </span>
                       </div>
@@ -719,14 +719,14 @@ function FeedbackTab({
   return (
     <div className="space-y-6">
       {avgRating && (
-        <div className="rounded-lg bg-slate-800/50 p-4">
-          <p className="text-xs text-slate-500">Average rating</p>
-          <p className="font-mono text-2xl text-cyan-400">⭐ {avgRating} / 5</p>
+        <div className="rounded-lg bg-[var(--surface-hover)] p-4">
+          <p className="text-xs text-[var(--muted)]">Average rating</p>
+          <p className="font-mono text-2xl text-[var(--accent)]">⭐ {avgRating} / 5</p>
         </div>
       )}
       {checkedIn.length > 0 && (
-        <form onSubmit={handleSubmit} className="rounded-lg bg-slate-800/50 p-4">
-          <h3 className="mb-3 font-mono text-sm font-medium text-slate-400">
+        <form onSubmit={handleSubmit} className="rounded-lg bg-[var(--surface-hover)] p-4">
+          <h3 className="mb-3 font-mono text-sm font-medium text-[var(--muted)]">
             Submit feedback (checked-in participants only)
           </h3>
           <div className="flex flex-wrap gap-4">
@@ -734,7 +734,7 @@ function FeedbackTab({
               value={selectedId}
               onChange={(e) => setSelectedId(e.target.value)}
               required
-              className="rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
+              className="rounded border border-[var(--border)] bg-[var(--surface-hover)] px-3 py-2 text-sm text-[var(--foreground)]"
             >
               <option value="">Select participant</option>
               {checkedIn.map((p) => (
@@ -744,13 +744,13 @@ function FeedbackTab({
               ))}
             </select>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-500">Rating:</span>
+              <span className="text-sm text-[var(--muted)]">Rating:</span>
               {[1, 2, 3, 4, 5].map((r) => (
                 <button
                   key={r}
                   type="button"
                   onClick={() => setRating(r)}
-                  className={`rounded px-2 py-1 text-sm ${rating >= r ? "text-amber-400" : "text-slate-500"}`}
+                  className={`rounded px-2 py-1 text-sm ${rating >= r ? "text-amber-500" : "text-[var(--muted)]"}`}
                 >
                   ★
                 </button>
@@ -761,12 +761,12 @@ function FeedbackTab({
               placeholder="Comment (optional)"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="min-w-[200px] rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white placeholder-slate-500"
+              className="min-w-[200px] rounded border border-[var(--border)] bg-[var(--surface-hover)] px-3 py-2 text-sm text-[var(--foreground)] placeholder-[var(--muted)]"
             />
             <button
               type="submit"
               disabled={submitting || !selectedId || rating < 1}
-              className="rounded bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-500 disabled:opacity-50"
+              className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--background)] hover:bg-[var(--accent-dim)] disabled:opacity-50"
             >
               {submitting ? "..." : "Submit"}
             </button>
@@ -774,26 +774,26 @@ function FeedbackTab({
         </form>
       )}
       <div>
-        <h3 className="mb-3 font-mono text-sm font-medium text-slate-400">
+        <h3 className="mb-3 font-mono text-sm font-medium text-[var(--muted)]">
           Feedback ({feedback.length})
         </h3>
         {feedback.length === 0 ? (
-          <p className="text-slate-500">No feedback yet.</p>
+          <p className="text-[var(--muted)]">No feedback yet.</p>
         ) : (
           <div className="space-y-3">
             {feedback.map((f) => (
               <div
                 key={f.id}
-                className="rounded-lg border border-slate-800 bg-slate-800/30 p-3"
+                className="rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] p-3"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-white">{f.participant.name}</span>
+                  <span className="font-medium text-[var(--foreground)]">{f.participant.name}</span>
                   <span className="text-amber-400">{"★".repeat(f.rating)}</span>
                 </div>
                 {f.comment && (
-                  <p className="mt-2 text-sm text-slate-400">{f.comment}</p>
+                  <p className="mt-2 text-sm text-[var(--muted)]">{f.comment}</p>
                 )}
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-[var(--muted)]">
                   {new Date(f.createdAt).toLocaleString()}
                 </p>
               </div>
@@ -815,14 +815,14 @@ function StatCard({
   max?: number | null;
 }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-      <p className="text-xs font-mono uppercase tracking-wider text-slate-500">
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] p-4">
+      <p className="text-xs font-mono uppercase tracking-wider text-[var(--muted)]">
         {label}
       </p>
-      <p className="mt-1 font-mono text-2xl font-bold text-white">
+      <p className="mt-1 font-mono text-2xl font-bold text-[var(--foreground)]">
         {value}
         {max && typeof value === "number" && (
-          <span className="ml-1 text-sm font-normal text-slate-500">/ {max}</span>
+          <span className="ml-1 text-sm font-normal text-[var(--muted)]">/ {max}</span>
         )}
       </p>
     </div>

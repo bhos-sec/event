@@ -53,7 +53,7 @@ export default function QRScanner({ onScan, onError }: QRScannerProps) {
         id="qr-reader"
         ref={containerRef}
         className={`overflow-hidden rounded-xl border border-slate-700 ${
-          ready ? "" : "min-h-[250px] bg-slate-800"
+          ready ? "" : "min-h-[250px] bg-[var(--surface-hover)]"
         }`}
       />
       {error && (
