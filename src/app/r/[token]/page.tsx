@@ -253,8 +253,8 @@ export default function ParticipantSelfServicePage() {
           </div>
 
           {reg.checkedIn && !feedbackSubmitted && (
-            <form onSubmit={handleFeedback} className="mt-6 rounded-lg border border-slate-800 bg-slate-800/30 p-4">
-              <h3 className="mb-3 font-mono text-sm font-medium text-slate-400">
+            <form onSubmit={handleFeedback} className="mt-6 rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] p-4">
+              <h3 className="mb-3 font-mono text-sm font-medium text-[var(--muted)]">
                 Leave feedback
               </h3>
               <div className="mb-3 flex gap-1">
@@ -263,7 +263,7 @@ export default function ParticipantSelfServicePage() {
                     key={r}
                     type="button"
                     onClick={() => setFeedbackRating(r)}
-                    className={`rounded px-2 py-1 text-lg ${feedbackRating >= r ? "text-amber-400" : "text-slate-500 hover:text-slate-400"}`}
+                    className={`rounded px-2 py-1 text-lg ${feedbackRating >= r ? "text-amber-500" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
                   >
                     ★
                   </button>
@@ -274,12 +274,12 @@ export default function ParticipantSelfServicePage() {
                 value={feedbackComment}
                 onChange={(e) => setFeedbackComment(e.target.value)}
                 rows={2}
-                className="mb-3 w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white placeholder-slate-500"
+                className="mb-3 w-full rounded border border-[var(--border)] bg-[var(--surface-hover)] px-3 py-2 text-sm text-[var(--foreground)] placeholder-[var(--muted)]"
               />
               <button
                 type="submit"
                 disabled={feedbackLoading || feedbackRating < 1}
-                className="rounded bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-500 disabled:opacity-50"
+                className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--background)] hover:bg-[var(--accent-dim)] disabled:opacity-50"
               >
                 {feedbackLoading ? "..." : "Submit feedback"}
               </button>
@@ -290,7 +290,7 @@ export default function ParticipantSelfServicePage() {
             <p className="mt-4 text-emerald-400">Thank you for your feedback!</p>
           )}
 
-          <div className="mt-6 border-t border-slate-800 pt-4">
+          <div className="mt-6 border-t border-[var(--border)] pt-4">
             <button
               onClick={handleCancel}
               disabled={cancelLoading}
@@ -303,7 +303,7 @@ export default function ParticipantSelfServicePage() {
           {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
         </div>
 
-        <p className="mt-4 text-center text-xs text-slate-500">
+        <p className="mt-4 text-center text-xs text-[var(--muted)]">
           Keep this link private. It allows you to manage your registration.
         </p>
       </main>

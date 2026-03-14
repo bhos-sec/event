@@ -262,7 +262,7 @@ export default function EventDetailPage() {
 
   if (loading || !event) {
     return (
-      <div className="min-h-screen bg-slate-950">
+      <div className="min-h-screen bg-[var(--background)]">
         <div className="flex items-center justify-center py-32">
           <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
         </div>
@@ -274,18 +274,18 @@ export default function EventDetailPage() {
   const isFull = event.maxParticipants ? event._count.participants >= event.maxParticipants : false;
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-[var(--background)]">
       <main className="mx-auto max-w-6xl px-4 py-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <Link
               href="/events"
-              className="mb-4 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-cyan-400"
+              className="mb-4 inline-flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--accent)]"
             >
               ← Back to events
             </Link>
-            <h1 className="font-mono text-3xl font-bold text-white">{event.name}</h1>
-            <p className="mt-2 text-slate-400">
+            <h1 className="font-mono text-3xl font-bold text-[var(--foreground)]">{event.name}</h1>
+            <p className="mt-2 text-[var(--muted)]">
               {startDate.toLocaleDateString("en-US", {
                 weekday: "long",
                 year: "numeric",
@@ -296,7 +296,7 @@ export default function EventDetailPage() {
               })}
             </p>
             {event.location && (
-              <p className="mt-1 text-slate-500">📍 {event.location}</p>
+              <p className="mt-1 text-[var(--muted)]">📍 {event.location}</p>
             )}
             {event.description && (
               <p className="mt-3 text-slate-400">{event.description}</p>
