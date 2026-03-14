@@ -21,7 +21,7 @@ export async function GET(
       .sort((a, b) => (a.joinedAt || "").localeCompare(b.joinedAt || ""));
     return NextResponse.json(entries);
   } catch (error) {
-    console.error("Failed to fetch waitlist");
+    console.error("Failed to fetch waitlist", error);
     return NextResponse.json(
       { error: "Failed to fetch waitlist" },
       { status: 500 }

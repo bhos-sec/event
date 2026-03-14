@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 
 export default function ParticipantQRPage() {
@@ -49,12 +50,13 @@ export default function ParticipantQRPage() {
           <p className="text-sm text-slate-500">{participant.email}</p>
 
           <div className="mx-auto mt-6 flex w-64 justify-center rounded-xl bg-white p-4">
-            <img
+            <Image
               src={qrUrl}
               alt="QR Code for check-in"
               className="h-64 w-64"
               width={256}
               height={256}
+              unoptimized
             />
           </div>
 

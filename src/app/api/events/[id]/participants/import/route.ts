@@ -110,7 +110,7 @@ export async function POST(
       participants: created,
     });
   } catch (error) {
-    console.error("Failed to import participants");
+    console.error("Failed to import participants", error);
     return NextResponse.json(
       { error: "Failed to import participants" },
       { status: 500 }

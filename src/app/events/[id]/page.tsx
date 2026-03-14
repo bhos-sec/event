@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import Nav from "@/components/Nav";
@@ -58,20 +58,20 @@ export default function EventDetailPage() {
   const [regError, setRegError] = useState("");
   const [dupLoading, setDupLoading] = useState(false);
   const [checkInLoading, setCheckInLoading] = useState<string | null>(null);
-  const [waitlist, setWaitlist] = useState<WaitlistEntry[]>([]);
+  const [, setWaitlist] = useState<WaitlistEntry[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [bulkCheckInLoading, setBulkCheckInLoading] = useState(false);
-  const [importLoading, setImportLoading] = useState(false);
+  const [, setImportLoading] = useState(false);
   const [regSuccess, setRegSuccess] = useState("");
   const [regSuccessToken, setRegSuccessToken] = useState<string | null>(null);
 
-  async function fetchParticipants(search?: string) {
+  const fetchParticipants = useCallback(async (search?: string) => {
     const url = search
       ? `/api/events/${id}/participants?search=${encodeURIComponent(search)}`
       : `/api/events/${id}/participants`;
     const res = await fetch(url);
     if (res.ok) setParticipants(await res.json());
-  }
+  }, [id]);
 
   useEffect(() => {
     async function fetchData() {
@@ -109,7 +109,7 @@ export default function EventDetailPage() {
     }
     const t = setTimeout(() => fetchParticipants(searchQuery), 300);
     return () => clearTimeout(t);
-  }, [id, searchQuery, loading]);
+  }, [id, searchQuery, loading, fetchParticipants]);
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
