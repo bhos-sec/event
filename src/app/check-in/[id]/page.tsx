@@ -85,37 +85,37 @@ export default function CheckInPage() {
 
   if (loading || !event) {
     return (
-      <div className="min-h-screen bg-slate-950">
+      <div className="min-h-screen bg-[var(--background)]">
         <Nav />
         <div className="flex items-center justify-center py-32">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-[var(--background)]">
       <Nav />
       <main className="mx-auto max-w-lg px-4 py-12">
         <Link
           href={`/events/${eventId}`}
-          className="mb-6 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-cyan-400"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--accent)]"
         >
           ← Back to event
         </Link>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-          <h1 className="font-mono text-2xl font-bold text-white">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-hover)] p-8">
+          <h1 className="font-mono text-2xl font-bold text-[var(--foreground)]">
             Check-in: {event.name}
           </h1>
-          <p className="mt-2 text-slate-400">
+          <p className="mt-2 text-[var(--muted)]">
             Scan your QR code or enter your check-in token below.
           </p>
 
           {tokenFromUrl ? (
             <div className="mt-6">
-              <p className="mb-2 text-sm text-slate-500">Token from URL detected</p>
+              <p className="mb-2 text-sm text-[var(--muted)]">Token from URL detected</p>
               <form onSubmit={handleCheckIn}>
                 <input
                   type="hidden"
@@ -125,7 +125,7 @@ export default function CheckInPage() {
                 <button
                   type="submit"
                   disabled={checking}
-                  className="w-full rounded-lg bg-cyan-600 py-4 font-mono font-medium text-white hover:bg-cyan-500 disabled:opacity-50"
+                  className="w-full rounded-lg bg-[var(--accent)] py-4 font-mono font-medium text-[var(--background)] hover:bg-[var(--accent-dim)] disabled:opacity-50"
                 >
                   {checking ? "Checking in..." : "Check In"}
                 </button>
@@ -157,12 +157,12 @@ export default function CheckInPage() {
                   placeholder="Or paste QR token manually"
                   value={manualToken}
                   onChange={(e) => setManualToken(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-4 font-mono text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-4 font-mono text-[var(--foreground)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                 />
                 <button
                   type="submit"
                   disabled={checking || !manualToken.trim()}
-                  className="w-full rounded-lg bg-cyan-600 py-4 font-mono font-medium text-white hover:bg-cyan-500 disabled:opacity-50"
+                  className="w-full rounded-lg bg-[var(--accent)] py-4 font-mono font-medium text-[var(--background)] hover:bg-[var(--accent-dim)] disabled:opacity-50"
                 >
                   {checking ? "Checking in..." : "Check In"}
                 </button>
@@ -186,9 +186,9 @@ export default function CheckInPage() {
           )}
         </div>
 
-        <p className="mt-6 text-center text-sm text-slate-500">
+        <p className="mt-6 text-center text-sm text-[var(--muted)]">
           Organizers: Use the{" "}
-          <Link href={`/events/${eventId}`} className="text-cyan-400 hover:underline">
+          <Link href={`/events/${eventId}`} className="text-[var(--accent)] hover:underline">
             event page
           </Link>{" "}
           to manage participants and view analytics.
