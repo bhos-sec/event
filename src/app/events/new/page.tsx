@@ -60,16 +60,16 @@ export default function NewEventPage() {
       <div className="mx-auto max-w-2xl px-6 py-12">
         <Link
           href="/events"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--foreground)]"
         >
           <span className="font-mono">←</span> Back to events
         </Link>
 
-        <h1 className="mb-8 font-mono text-3xl font-bold text-white">Create Event</h1>
+        <h1 className="mb-8 font-mono text-3xl font-bold text-[var(--foreground)]">Create Event</h1>
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-xl border border-slate-700/50 bg-slate-800/30 p-6"
+          className="rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] p-6"
         >
           {error && (
             <div className="mb-4 rounded-lg bg-red-500/20 p-3 text-sm text-red-400">
@@ -79,7 +79,7 @@ export default function NewEventPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-300">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Event Name *
               </label>
               <input
@@ -87,45 +87,45 @@ export default function NewEventPage() {
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-[var(--foreground)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                 placeholder="Tech Talk: AI in 2025"
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-300">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Description
               </label>
               <textarea
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 rows={3}
-                className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-[var(--foreground)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                 placeholder="Brief description of the event..."
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-300">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Location
               </label>
               <input
                 type="text"
                 value={form.location}
                 onChange={(e) => setForm({ ...form, location: e.target.value })}
-                className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-[var(--foreground)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                 placeholder="Room 101, Main Building"
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-300">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Category
               </label>
               <select
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
               >
                 <option value="">Select category</option>
                 <option value="workshop">Workshop</option>
@@ -139,7 +139,7 @@ export default function NewEventPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-300">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   Start Date & Time *
                 </label>
                 <input
@@ -147,24 +147,24 @@ export default function NewEventPage() {
                   required
                   value={form.startDate}
                   onChange={(e) => setForm({ ...form, startDate: e.target.value })}
-                  className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-300">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   End Date & Time
                 </label>
                 <input
                   type="datetime-local"
                   value={form.endDate}
                   onChange={(e) => setForm({ ...form, endDate: e.target.value })}
-                  className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                 />
               </div>
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-300">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Max Participants
               </label>
               <input
@@ -172,32 +172,32 @@ export default function NewEventPage() {
                 min="1"
                 value={form.maxParticipants}
                 onChange={(e) => setForm({ ...form, maxParticipants: e.target.value })}
-                className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-[var(--foreground)] placeholder-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                 placeholder="Unlimited"
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-300">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Registration Deadline
               </label>
               <input
                 type="datetime-local"
                 value={form.registrationDeadline}
                 onChange={(e) => setForm({ ...form, registrationDeadline: e.target.value })}
-                className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
               />
-              <p className="mt-1 text-xs text-slate-500">Leave empty for no deadline</p>
+              <p className="mt-1 text-xs text-[var(--muted)]">Leave empty for no deadline</p>
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-300">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Status
               </label>
               <select
                 value={form.status}
                 onChange={(e) => setForm({ ...form, status: e.target.value })}
-                className="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
               >
                 <option value="draft">Draft</option>
                 <option value="published">Published</option>
@@ -209,13 +209,13 @@ export default function NewEventPage() {
             <button
               type="submit"
               disabled={loading}
-              className="rounded-lg bg-cyan-500 px-4 py-2 font-medium text-slate-900 transition-colors hover:bg-cyan-400 disabled:opacity-50"
+              className="rounded-lg bg-[var(--accent)] px-4 py-2 font-medium text-[var(--background)] transition-colors hover:bg-[var(--accent-dim)] disabled:opacity-50"
             >
               {loading ? "Creating..." : "Create Event"}
             </button>
             <Link
               href="/events"
-              className="rounded-lg border border-slate-600 px-4 py-2 text-slate-300 hover:bg-slate-800"
+              className="rounded-lg border border-[var(--border)] px-4 py-2 text-[var(--foreground)] hover:bg-[var(--surface-hover)]"
             >
               Cancel
             </Link>
