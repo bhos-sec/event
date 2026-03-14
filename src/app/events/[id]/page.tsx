@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import Nav from "@/components/Nav";
 
 type Event = {
   id: string;
@@ -61,7 +60,6 @@ export default function EventDetailPage() {
   const [, setWaitlist] = useState<WaitlistEntry[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [bulkCheckInLoading, setBulkCheckInLoading] = useState(false);
-  const [, setImportLoading] = useState(false);
   const [regSuccess, setRegSuccess] = useState("");
   const [regSuccessToken, setRegSuccessToken] = useState<string | null>(null);
 
@@ -265,7 +263,6 @@ export default function EventDetailPage() {
   if (loading || !event) {
     return (
       <div className="min-h-screen bg-slate-950">
-        <Nav />
         <div className="flex items-center justify-center py-32">
           <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
         </div>
@@ -278,7 +275,6 @@ export default function EventDetailPage() {
 
   return (
     <div className="min-h-screen bg-slate-950">
-      <Nav />
       <main className="mx-auto max-w-6xl px-4 py-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
